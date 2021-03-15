@@ -64,6 +64,56 @@ function RegisterForm() {
         </label>
       </div>
       <div>
+        <label htmlFor="firstName">
+          First Name:
+          <input
+            type="text"
+            name="firstName"
+            value={firstName}
+            required
+            onChange={(event) => setFirstName(event.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label htmlFor="lastName">
+          Last Name:
+          <input
+            type="text"
+            name="lastName"
+            value={lastName}
+            required
+            onChange={(event) => setLastName(event.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label htmlFor="age">
+          Age:
+          <input
+            type="number"
+            name="age"
+            value={age}
+            required
+            onChange={(event) => setAge(event.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label htmlFor="readingGradeLevel">
+          Reading Grade Level:
+          <select value={readingGradeLevel} onChange={event => setReadingGradeLevel(event.target.value)}>
+            <option value='0'>Kindergarten</option>
+            <option value='1'>First Grade</option>
+            <option value='2'>Second Grade</option>
+            <option value='3'>Third Grade</option>
+            <option value='4'>Fourth Grade</option>
+            <option value='5'>Fifth Grade</option>
+            <option value='6'>Sixth Grade</option>
+          </select>
+        </label>
+      </div>
+      <div>
         <input className="btn" type="submit" name="submit" value="Register" />
       </div>
     </form>
