@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Popup from 'reactjs-popup';
 import './AddBookForm.css';
 import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
+import axios from 'axios';
 
 function AddBookForm() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ function AddBookForm() {
   const [bookCoverImage, setBookCoverImage] = useState('');
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
 
-  const [scannedIsbn, setScannedIsbn] = useState('');
+  const [scanResults, setScanResults] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -38,6 +39,25 @@ function AddBookForm() {
     };
     console.log('booktoAdd', bookToAdd);
     // TODO -- SET UP POST IN SERVER
+  };
+
+  const handleScan = () => {
+    console.log('isbn', isbn);
+    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
+    axios
+      .get(
+        `${url}`
+      )
+      .then((data) => {
+        console.log(data.data.items);
+        setTitle(data.data.items[0].volumeInfo.title);
+        setAuthor(data.data.items[0].volumeInfo.authors[0]);
+        setDescription(data.data.items[0].volumeInfo.description);
+        setBookCoverImage(data.data.items[0].volumeInfo.imageLinks.thumbnail);
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
   };
 
   return (
@@ -80,6 +100,8 @@ function AddBookForm() {
           <textarea
             name="description"
             placeholder="Enter a brief description here..."
+            value={description}
+            onChange={event => setDescription(event.target.value)}
             rows="4"
             cols="50"
           ></textarea>
@@ -97,14 +119,13 @@ function AddBookForm() {
         <div>
           <button>Submit</button>
         </div>
-        <Popup
+      </form>
+      <Popup
           trigger={<button className="button">Scan ISBN</button>}
-          modal
-          nested
-        >
+          modal>
           {(close) => (
             <div className="modal">
-              <button className="close" onClick={close}>
+              <button type="button" className="close" onClick={close}>
                 &times;
               </button>
               <div className="header">Scan the book's barcode</div>
@@ -114,29 +135,21 @@ function AddBookForm() {
                   height={500}
                   onUpdate={(err, result) => {
                     if (result) {
-                      console.log('result', result);
                       setIsbn(result.text);
-                      console.log('isbn', isbn);
                     }
                   }}
                 />
                 <p>ISBN: {isbn}</p>
               </div>
               <div className="actions">
-                <Popup
-                  trigger={<button className="button"> More Info </button>}
-                  position="top center"
-                  nested
-                >
-                  <span>Here is a button that I probaby don't need...</span>
-                </Popup>
                 <button
                   className="button"
                   onClick={() => {
-                    console.log('scanning');
+                    handleScan();
+                    close();
                   }}
                 >
-                  Scan
+                  Confirm
                 </button>
                 <button
                   className="button"
@@ -151,7 +164,6 @@ function AddBookForm() {
             </div>
           )}
         </Popup>
-      </form>
     </div>
   );
 }
