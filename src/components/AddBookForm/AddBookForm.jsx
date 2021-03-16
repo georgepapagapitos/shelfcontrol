@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Popup from 'reactjs-popup';
+import './AddBookForm.css';
+import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
 
 function AddBookForm() {
   const dispatch = useDispatch();
@@ -20,6 +23,8 @@ function AddBookForm() {
   const [bookCoverImage, setBookCoverImage] = useState('');
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
 
+  const [scannedIsbn, setScannedIsbn] = useState('');
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const bookToAdd = {
@@ -31,8 +36,8 @@ function AddBookForm() {
       bookCoverImage,
       readingGradeLevel,
     };
-
     console.log('booktoAdd', bookToAdd);
+    // TODO -- SET UP POST IN SERVER
   };
 
   return (
@@ -92,6 +97,60 @@ function AddBookForm() {
         <div>
           <button>Submit</button>
         </div>
+        <Popup
+          trigger={<button className="button">Scan ISBN</button>}
+          modal
+          nested
+        >
+          {(close) => (
+            <div className="modal">
+              <button className="close" onClick={close}>
+                &times;
+              </button>
+              <div className="header">Scan the book's barcode</div>
+              <div className="content">
+                <BarcodeScannerComponent
+                  width={500}
+                  height={500}
+                  onUpdate={(err, result) => {
+                    if (result) {
+                      console.log('result', result);
+                      setIsbn(result.text);
+                      console.log('isbn', isbn);
+                    }
+                  }}
+                />
+                <p>ISBN: {isbn}</p>
+              </div>
+              <div className="actions">
+                <Popup
+                  trigger={<button className="button"> More Info </button>}
+                  position="top center"
+                  nested
+                >
+                  <span>Here is a button that I probaby don't need...</span>
+                </Popup>
+                <button
+                  className="button"
+                  onClick={() => {
+                    console.log('scanning');
+                  }}
+                >
+                  Scan
+                </button>
+                <button
+                  className="button"
+                  onClick={() => {
+                    console.log('modal closed ');
+                    close();
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+        </Popup>
       </form>
     </div>
   );
