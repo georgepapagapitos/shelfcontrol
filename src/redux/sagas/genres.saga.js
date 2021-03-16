@@ -14,8 +14,19 @@ function* fetchGenres() {
   }
 }
 
+function* addGenre(action) {
+  try {
+    yield axios.post('/api/genre', action.payload);
+    yield put({ type: 'FETCH_GENRES' });
+  }
+  catch(err) {
+    console.log('error in addGenre', err);
+  }
+}
+
 function* genresSaga() {
-  yield takeLatest('FETCH_GENRES', fetchGenres)
+  yield takeLatest('FETCH_GENRES', fetchGenres);
+  yield takeLatest('ADD_NEW_GENRE', addGenre);
 }
 
 export default genresSaga;

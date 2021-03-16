@@ -12,9 +12,14 @@ function AddBookForm() {
     dispatch({
       type: 'FETCH_GENRES',
     });
+    dispatch({
+      type: 'FETCH_READING_GRADE_LEVELS'
+    });
   }, []);
 
   const genres = useSelector((store) => store.genres);
+  const readingGradeLevels = useSelector((store) => store.readingGradeLevels)
+  console.log('levels', readingGradeLevels);
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -23,8 +28,6 @@ function AddBookForm() {
   const [description, setDescription] = useState('');
   const [bookCoverImage, setBookCoverImage] = useState('');
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
-
-  const [scanResults, setScanResults] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -49,9 +52,18 @@ function AddBookForm() {
         `${url}`
       )
       .then((data) => {
-        console.log(data.data.items);
+        console.log(data.data.items[0].volumeInfo.categories[0]);
         setTitle(data.data.items[0].volumeInfo.title);
         setAuthor(data.data.items[0].volumeInfo.authors[0]);
+        if(genres.includes(data.data.items[0].volumeInfo.categories[0])) {
+          setSelectedGenre(data.data.items[0].volumeInfo.categories[0]);
+        } else {
+          console.log('adding new genre', data.data.items[0].volumeInfo.categories[0])
+          dispatch({
+            type: 'ADD_NEW_GENRE',
+            payload: {genreToAdd: data.data.items[0].volumeInfo.categories[0]}
+          })
+        }
         setDescription(data.data.items[0].volumeInfo.description);
         setBookCoverImage(data.data.items[0].volumeInfo.imageLinks.thumbnail);
       })
@@ -88,6 +100,21 @@ function AddBookForm() {
             })}
           </select>
         </label>
+        <label htmlFor="readingLevels">
+          <select
+            name="readingLevels"
+            onChange={(event) => setReadingGradeLevel(event.target.value)}
+          >
+            <option disabled>Choose a reading grade level</option>
+            {readingGradeLevels.map((gradeLevel) => {
+              return (
+                <option key={gradeLevel.id} value={gradeLevel.id}>
+                  {gradeLevel.reading_grade_level}
+                </option>
+              );
+            })}
+          </select>
+        </label>
         <label htmlFor="isbn">
           <input
             placeholder="ISBN"
@@ -110,11 +137,6 @@ function AddBookForm() {
           placeholder="Book Cover Image URL"
           value={bookCoverImage}
           onChange={(event) => setBookCoverImage(event.target.value)}
-        />
-        <input
-          placeholder="Reading Grade Level"
-          value={readingGradeLevel}
-          onChange={(event) => setReadingGradeLevel(event.target.value)}
         />
         <div>
           <button>Submit</button>
