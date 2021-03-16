@@ -21,6 +21,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
+import AddBookForm from '../AddBookForm/AddBookForm';
 
 function App() {
   const dispatch = useDispatch();
@@ -101,6 +102,10 @@ function App() {
           >
             <LandingPage />
           </ProtectedRoute>
+
+          <Route exact path="/books">
+            <AddBookForm />
+          </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
