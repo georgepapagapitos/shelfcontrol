@@ -12,7 +12,6 @@ const userRouter = require('./routes/user.router');
 const genreRouter = require('./routes/genre.router');
 const readingLevelRouter = require('./routes/reading.level.router');
 const bookRouter = require('./routes/book.router');
-const cartRouter = require('./routes/cart.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -30,7 +29,6 @@ app.use('/api/user', userRouter);
 app.use('/api/genre', genreRouter);
 app.use('/api/readingLevels', readingLevelRouter);
 app.use('/api/book', bookRouter);
-app.use('/api/cart', cartRouter);
 
 // Serve static files
 app.use(express.static('build'));

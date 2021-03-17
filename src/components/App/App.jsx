@@ -23,6 +23,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import './App.css';
 import AddBookForm from '../AddBookForm/AddBookForm';
 import BookListView from '../BookListView/BookListView';
+import CartView from '../CartView/CartView';
 
 function App() {
   const dispatch = useDispatch();
@@ -106,6 +107,10 @@ function App() {
 
           <Route exact path="/add">
             <AddBookForm />
+          </Route>
+
+          <Route exact path="/cart">
+            <CartView />
           </Route>
 
           <Route exact path='/books'>

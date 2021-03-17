@@ -49,4 +49,17 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+router.put('/:id', (req, res) => {
+  const bookId = req.params.id;
+  console.log('book id to update:', bookId);
+  const query = 'UPDATE "books" SET "is_available" = NOT"is_available" WHERE "id"=$1;';
+  pool.query(query, [bookId])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log('error in PUT /book', err);
+    })
+})
+
 module.exports = router;

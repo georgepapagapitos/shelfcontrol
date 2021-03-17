@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Typography } from "@material-ui/core";
+import moment from 'moment';
 
 import './BookListView.css';
 
@@ -20,7 +21,13 @@ function BookListView() {
     console.log('in add', book);
     dispatch({
       type: 'ADD_TO_CART',
-      payload: book
+      payload: { 
+        book: book,
+        date: moment().format()}
+    })
+    dispatch({
+      type: 'TOGGLE_AVAILABLE',
+      payload: book.id
     })
   }
 

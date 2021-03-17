@@ -32,10 +32,22 @@ function* deleteBook(action) {
   }
 }
 
+function* toggleAvailable(action) {
+  try {
+    yield axios.put(`/api/book/${action.payload}`);
+    yield put({ type: 'FETCH_BOOKS' });
+  }
+  catch(err) {
+    console.log('error in setBookUnavailable', err);
+  }
+}
+
+
 function* booksSaga() {
   yield takeLatest('FETCH_BOOKS', fetchBooks);
   yield takeLatest('ADD_BOOK', addBook);
   yield takeLatest('DELETE_BOOK', deleteBook);
+  yield takeLatest('TOGGLE_AVAILABLE', toggleAvailable);
 }
 
 export default booksSaga;
