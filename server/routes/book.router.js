@@ -22,9 +22,10 @@ router.post('/', (req, res) => {
   const description = req.body.description;
   const readingGradeLevelId = req.body.readingGradeLevel;
   const bookCoverImage = req.body.bookCoverImage;
-  const query = `INSERT INTO "books" ("title", "author", "genre_id", "isbn", "description", "book_cover_image", "reading_grade_level_id")
-  VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id";`;
-  pool.query(query, [bookTitle, bookAuthor, genreId, isbn, description, bookCoverImage, readingGradeLevelId])
+  const infoPage = req.body.infoPage;
+  const query = `INSERT INTO "books" ("title", "author", "genre_id", "isbn", "description", "book_cover_image", "reading_grade_level_id", "info_page")
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id";`;
+  pool.query(query, [bookTitle, bookAuthor, genreId, isbn, description, bookCoverImage, readingGradeLevelId, infoPage])
     .then(result => {
       console.log('New book ID:', result.rows[0].id);
       res.sendStatus(201);

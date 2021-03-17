@@ -104,13 +104,13 @@ function App() {
             <LandingPage />
           </ProtectedRoute>
 
-          <ProtectedRoute exact path="/home" authRedirect="/add">
+          <Route exact path="/add">
             <AddBookForm />
-          </ProtectedRoute>
+          </Route>
 
-          <ProtectedRoute exact path='/home' authRedirect="/books">
+          <Route exact path='/books'>
             <BookListView />
-          </ProtectedRoute>
+          </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>

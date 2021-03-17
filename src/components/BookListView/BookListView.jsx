@@ -27,7 +27,11 @@ function BookListView() {
             <div key={book.id} className="card">
               <h3>{book.title}</h3>
               <hr/>
-              <img className="book-cover" src={book.book_cover_image} alt={book.title} />
+              <a target="_blank" href={book.info_page}>
+                <img className="book-cover" src={book.book_cover_image} alt={book.title} />
+                <button onClick={handleAdd}>Add To Cart</button>
+                <button onClick={handleDelete}>Delete</button>
+              </a>
             </div>
           )
         })}

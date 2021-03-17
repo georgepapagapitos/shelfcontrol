@@ -5,22 +5,6 @@ import './AddBookForm.css';
 import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
 import axios from 'axios';
 
-const compare = (array1, array2) => {
-
-  const finalArray = [];
-  array1.forEach((e1) => array2.forEach((e2) => {
-    if(e1 === e2) {
-      finalArray.push(e1)
-    }
-  }));
-
-  if(finalArray.length > 0) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
 function AddBookForm() {
   const dispatch = useDispatch();
 
@@ -43,6 +27,7 @@ function AddBookForm() {
   const [description, setDescription] = useState('');
   const [bookCoverImage, setBookCoverImage] = useState('');
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
+  const [infoPage, setInfoPage] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -54,7 +39,9 @@ function AddBookForm() {
       description,
       bookCoverImage,
       readingGradeLevel,
+      infoPage
     };
+
     console.log('booktoAdd', bookToAdd);
     dispatch({
       type: 'ADD_BOOK',
@@ -71,23 +58,32 @@ function AddBookForm() {
         `${url}`
       )
       .then((data) => {
-        console.log(data.data.items[0].volumeInfo.categories[0]);
+        const genreToAdd = data.data.items[0].volumeInfo.categories[0]
+        console.log('scanned genre', genreToAdd);
         setTitle(data.data.items[0].volumeInfo.title);
         setAuthor(data.data.items[0].volumeInfo.authors[0]);
-          // if(compare(genres,data.data.items[0].volumeInfo.categories)) {
-          //   console.log('genre exists');
-          //   setSelectedGenre(genres,data.data.items[0].volumeInfo.categories[0]);
-          // } else {
-          //   const genreToAdd = data.data.items[0].volumeInfo.categories[0]
-          //   console.log('adding new genre', genreToAdd)
-          //   dispatch({
-          //     type: 'ADD_NEW_GENRE',
-          //     payload: {genreToAdd}
-          //   })
-          //   setSelectedGenre(genreToAdd);
-          // }
+        setInfoPage(data.data.items[0].volumeInfo.previewLink);
         setDescription(data.data.items[0].volumeInfo.description);
         setBookCoverImage(data.data.items[0].volumeInfo.imageLinks.thumbnail);
+
+        let doesGenreExist = false;
+
+        for(let genre of genres) {
+          if(genre.genre_name === genreToAdd) {
+            doesGenreExist = true;
+          }
+        }
+        if(doesGenreExist) {
+            console.log('genre exists');
+            setSelectedGenre(genreToAdd);
+          } else {
+            dispatch({
+              type: 'ADD_NEW_GENRE',
+              payload: {genreToAdd}
+            })
+            setSelectedGenre(genreToAdd);
+          }
+          
       })
       .catch(err => {
         console.log('error', err);
