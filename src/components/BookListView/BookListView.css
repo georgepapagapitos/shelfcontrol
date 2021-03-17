@@ -1,0 +1,24 @@
+.card {
+  box-shadow: 0 4px 8px 0 black;
+  transition: 0.3s;
+  padding: 2px 16px;
+  width: 250px;
+  margin: 1rem;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 black;
+}
+
+.card img {
+  padding: 1rem;
+}
+
+.books {
+  display : flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}

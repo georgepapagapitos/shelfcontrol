@@ -7,4 +7,4 @@ const booksReducer = (state = [], action) => {
   }
 }
 
-export default genresReducer;
+export default booksReducer;

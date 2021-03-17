@@ -3,18 +3,17 @@ import axios from 'axios';
 
 function* fetchBooks() {
   try {
-    const books = yield axios.get('/api/books');
+    const books = yield axios.get('/api/book');
     console.log('get all books:', books.data)
     yield put({ type: 'SET_BOOKS', payload: books.data});
-  }
-  catch(err) {
+  } catch(err) {
     console.log('error in fetchBooks', err);
   }
 }
 
 function* addBook(action) {
   try {
-    yield axios.post('/api/books', action.payload);
+    yield axios.post('/api/book', action.payload);
     yield put({ type: 'FETCH_BOOKS' });
   }
   catch(err) {

@@ -28,7 +28,7 @@ app.use(passport.session());
 app.use('/api/user', userRouter);
 app.use('/api/genre', genreRouter);
 app.use('/api/readingLevels', readingLevelRouter);
-app.use('/api/books', bookRouter);
+app.use('/api/book', bookRouter);
 
 // Serve static files
 app.use(express.static('build'));

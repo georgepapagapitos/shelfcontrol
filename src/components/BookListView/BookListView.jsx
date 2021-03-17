@@ -1,24 +1,39 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { Typography } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Paper from '@material-ui/core/Paper';
 
-
-
+import './BookListView.css';
 
 function BookListView() {
+
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch({
+      type: 'FETCH_BOOKS'
+    })
+  }, [])
+
+  const books = useSelector(store => store.books);
+
   return (
-    <div className='container'> 
+    <div className='container'>
       <Typography variant="h2" component="div" align="center">
         Available Books
       </Typography>
-      <div>
-        
-      </div> 
+      <div className="books">
+        {books.map(book => {
+          return (
+            <div key={book.id} className="card">
+              <h3>{book.title}</h3>
+              <hr/>
+              <img className="book-cover" src={book.book_cover_image} alt={book.title} />
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
 
-export default BookListView
+export default BookListView;

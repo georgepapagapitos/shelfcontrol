@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
 
+router.get('/', (req, res) => {
+  const query = `SELECT * FROM "books";`;
+  pool.query(query)
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(err => {
+      console.log('Error in GET /books', err);
+      res.sendStatus(500)
+    })
+})
+
 router.post('/', (req, res) => {
   const bookTitle = req.body.title;
   const bookAuthor = req.body.author;
@@ -18,7 +30,7 @@ router.post('/', (req, res) => {
       res.sendStatus(201);
     })
     .catch(err => {
-      console.log('Error in POST /book', err);
+      console.log('Error in POST /books', err);
       res.sendStatus(500);
     })
 })
