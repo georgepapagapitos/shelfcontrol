@@ -16,6 +16,14 @@ function BookListView() {
 
   const books = useSelector(store => store.books);
 
+  const handleAdd = () => {
+    console.log('in add');
+  }
+
+  const handleDelete = () => {
+    console.log('in delete');
+  }
+
   return (
     <div className='container'>
       <Typography variant="h2" component="div" align="center">
