@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
       res.send(result.rows);
     })
     .catch(err => {
-      console.log('Error in GET /books', err);
+      console.log('Error in GET /book', err);
       res.sendStatus(500)
     })
 })
@@ -31,8 +31,21 @@ router.post('/', (req, res) => {
       res.sendStatus(201);
     })
     .catch(err => {
-      console.log('Error in POST /books', err);
+      console.log('Error in POST /book', err);
       res.sendStatus(500);
+    })
+})
+
+router.delete('/:id', (req, res) => {
+  const bookId = req.params.id;
+  console.log('book id to delete:', bookId);
+  const query = 'DELETE FROM "books" WHERE "id"=$1;';
+  pool.query(query, [bookId])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log('Error in DELETE /book');
     })
 })
 

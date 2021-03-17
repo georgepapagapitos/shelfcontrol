@@ -20,8 +20,12 @@ function BookListView() {
     console.log('in add');
   }
 
-  const handleDelete = () => {
-    console.log('in delete');
+  const handleDelete = (bookId) => {
+    console.log('in delete', bookId);
+    dispatch({
+      type: 'DELETE_BOOK',
+      payload: { bookId }
+    })
   }
 
   return (
@@ -37,9 +41,9 @@ function BookListView() {
               <hr/>
               <a target="_blank" href={book.info_page}>
                 <img className="book-cover" src={book.book_cover_image} alt={book.title} />
-                <button onClick={handleAdd}>Add To Cart</button>
-                <button onClick={handleDelete}>Delete</button>
               </a>
+                <button onClick={handleAdd}>Add To Cart</button>
+                <button onClick={() => handleDelete(book.id)}>Delete</button>
             </div>
           )
         })}

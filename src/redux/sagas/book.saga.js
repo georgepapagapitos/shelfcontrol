@@ -6,7 +6,8 @@ function* fetchBooks() {
     const books = yield axios.get('/api/book');
     console.log('get all books:', books.data)
     yield put({ type: 'SET_BOOKS', payload: books.data});
-  } catch(err) {
+  }
+  catch(err) {
     console.log('error in fetchBooks', err);
   }
 }
@@ -21,9 +22,20 @@ function* addBook(action) {
   }
 }
 
+function* deleteBook(action) {
+  try {
+    yield axios.delete(`/api/book/${action.payload.bookId}`);
+    yield put({ type: 'FETCH_BOOKS' });
+  }
+  catch(err) {
+    console.log('error in deleteBook', err);
+  }
+}
+
 function* booksSaga() {
   yield takeLatest('FETCH_BOOKS', fetchBooks);
   yield takeLatest('ADD_BOOK', addBook);
+  yield takeLatest('DELETE_BOOK', deleteBook);
 }
 
 export default booksSaga;
