@@ -48,16 +48,18 @@ function AddBookForm() {
       payload: bookToAdd
     });
 
-    setTitle('');
-    setAuthor('');
-    setSelectedGenre('');
-    setIsbn('');
-    setDescription('');
-    setBookCoverImage('');
-    setReadingGradeLevel('');
-    setInfoPage('')
+    handleReset();
 
   };
+
+  const handleReset = () => {
+    setTitle('');
+    setAuthor('');
+    setInfoPage('');
+    setDescription('');
+    setBookCoverImage('');
+    setSelectedGenre('');
+  }
 
   const handleScan = () => {
     console.log('isbn', isbn);
@@ -113,7 +115,7 @@ function AddBookForm() {
           onChange={(event) => setAuthor(event.target.value)}
         />
         <label htmlFor="genres">
-           <select
+          <select
             name="genres"
             onChange={(event) => setSelectedGenre(event.target.value)}
           >
@@ -168,6 +170,7 @@ function AddBookForm() {
         <img src={bookCoverImage} alt={title} />
         <div>
           <button>Submit</button>
+          <button type="button" onClick={handleReset}>Reset</button>
         </div>
       </form>
       <Popup
