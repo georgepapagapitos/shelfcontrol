@@ -48,6 +48,15 @@ function AddBookForm() {
       payload: bookToAdd
     });
 
+    setTitle('');
+    setAuthor('');
+    setSelectedGenre('');
+    setIsbn('');
+    setDescription('');
+    setBookCoverImage('');
+    setReadingGradeLevel('');
+    setInfoPage('')
+
   };
 
   const handleScan = () => {
@@ -156,6 +165,7 @@ function AddBookForm() {
           value={bookCoverImage}
           onChange={(event) => setBookCoverImage(event.target.value)}
         />
+        <img src={bookCoverImage} alt={title} />
         <div>
           <button>Submit</button>
         </div>

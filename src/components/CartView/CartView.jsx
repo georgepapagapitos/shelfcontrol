@@ -15,6 +15,9 @@ function CartView() {
       type: 'TOGGLE_AVAILABLE',
       payload: book.id
     })
+    dispatch({
+      type: 'FETCH CART'
+    })
   }
 
   return (
