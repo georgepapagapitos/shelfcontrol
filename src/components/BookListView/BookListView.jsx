@@ -16,8 +16,12 @@ function BookListView() {
 
   const books = useSelector(store => store.books);
 
-  const handleAdd = () => {
+  const handleAdd = (book) => {
     console.log('in add');
+    dispatch({
+      type: 'ADD_TO_CART',
+      payload: {book}
+    })
   }
 
   const handleDelete = (bookId) => {
@@ -42,7 +46,7 @@ function BookListView() {
               <a target="_blank" href={book.info_page}>
                 <img className="book-cover" src={book.book_cover_image} alt={book.title} />
               </a>
-                <button onClick={handleAdd}>Add To Cart</button>
+                <button onClick={() => handleAdd(book)}>Add To Cart</button>
                 <button onClick={() => handleDelete(book.id)}>Delete</button>
             </div>
           )

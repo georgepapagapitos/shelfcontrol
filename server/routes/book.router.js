@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../modules/pool');
 
 router.get('/', (req, res) => {
-  const query = `SELECT * FROM "books";`;
+  const query = `SELECT * FROM "books" WHERE "is_available"=true;`;
   pool.query(query)
     .then(result => {
       res.send(result.rows);
