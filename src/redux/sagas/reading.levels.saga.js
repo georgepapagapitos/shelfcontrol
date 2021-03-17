@@ -4,7 +4,6 @@ import axios from 'axios';
 function* fetchReadingGradeLevels() {
   try {
     const readingGradeLevels = yield axios.get('/api/readingLevels')
-    console.log('readinglevels', readingGradeLevels.data);
     yield put({ 
       type: 'SET_READING_GRADE_LEVELS', 
       payload: readingGradeLevels.data

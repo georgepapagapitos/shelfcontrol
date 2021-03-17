@@ -10,17 +10,16 @@ router.get('/', (req, res) => {
       res.send(response.rows);
     })
     .catch(err => {
-      console.log('Error getting genres', err);
+      console.log('Error in GET genres', err);
       res.sendStatus(500);
     });
 });
 
 router.post('/', (req, res) => {
   const genreToAdd = req.body.genreToAdd;
-  const query = `INSERT INTO "genres" ("genre_name") VALUES ($1)`
+  const query = `IF [NOT] EXISTS (SELECT 1 FROM "genres" WHERE "genre_name"=$1 BEGIN INSERT INTO "genres" ("genre_name") VALUES ($1) RETURNING "id";`;
   pool.query(query, [genreToAdd])
     .then(result => {
-      console.log('New genre id:', results.rows[0].id);
       res.sendStatus(200);
     })
     .catch(err => {

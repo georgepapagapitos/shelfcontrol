@@ -5,6 +5,22 @@ import './AddBookForm.css';
 import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
 import axios from 'axios';
 
+const compare = (array1, array2) => {
+
+  const finalArray = [];
+  array1.forEach((e1) => array2.forEach((e2) => {
+    if(e1 === e2) {
+      finalArray.push(e1)
+    }
+  }));
+
+  if(finalArray.length > 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 function AddBookForm() {
   const dispatch = useDispatch();
 
@@ -18,8 +34,7 @@ function AddBookForm() {
   }, []);
 
   const genres = useSelector((store) => store.genres);
-  const readingGradeLevels = useSelector((store) => store.readingGradeLevels)
-  console.log('levels', readingGradeLevels);
+  const readingGradeLevels = useSelector((store) => store.readingGradeLevels);
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -41,7 +56,11 @@ function AddBookForm() {
       readingGradeLevel,
     };
     console.log('booktoAdd', bookToAdd);
-    // TODO -- SET UP POST IN SERVER
+    dispatch({
+      type: 'ADD_BOOK',
+      payload: bookToAdd
+    });
+
   };
 
   const handleScan = () => {
@@ -55,15 +74,18 @@ function AddBookForm() {
         console.log(data.data.items[0].volumeInfo.categories[0]);
         setTitle(data.data.items[0].volumeInfo.title);
         setAuthor(data.data.items[0].volumeInfo.authors[0]);
-        if(genres.includes(data.data.items[0].volumeInfo.categories[0])) {
-          setSelectedGenre(data.data.items[0].volumeInfo.categories[0]);
-        } else {
-          console.log('adding new genre', data.data.items[0].volumeInfo.categories[0])
-          dispatch({
-            type: 'ADD_NEW_GENRE',
-            payload: {genreToAdd: data.data.items[0].volumeInfo.categories[0]}
-          })
-        }
+          // if(compare(genres,data.data.items[0].volumeInfo.categories)) {
+          //   console.log('genre exists');
+          //   setSelectedGenre(genres,data.data.items[0].volumeInfo.categories[0]);
+          // } else {
+          //   const genreToAdd = data.data.items[0].volumeInfo.categories[0]
+          //   console.log('adding new genre', genreToAdd)
+          //   dispatch({
+          //     type: 'ADD_NEW_GENRE',
+          //     payload: {genreToAdd}
+          //   })
+          //   setSelectedGenre(genreToAdd);
+          // }
         setDescription(data.data.items[0].volumeInfo.description);
         setBookCoverImage(data.data.items[0].volumeInfo.imageLinks.thumbnail);
       })
@@ -86,7 +108,7 @@ function AddBookForm() {
           onChange={(event) => setAuthor(event.target.value)}
         />
         <label htmlFor="genres">
-          <select
+           <select
             name="genres"
             onChange={(event) => setSelectedGenre(event.target.value)}
           >

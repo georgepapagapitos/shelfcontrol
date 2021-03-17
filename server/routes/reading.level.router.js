@@ -7,7 +7,6 @@ router.get('/', (req, res) => {
   pool
     .query(query)
     .then(response => {
-      console.log('response', response.rows);
       res.send(response.rows);
     })
     .catch(err => {

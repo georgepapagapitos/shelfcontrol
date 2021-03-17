@@ -11,6 +11,7 @@ const passport = require('./strategies/user.strategy');
 const userRouter = require('./routes/user.router');
 const genreRouter = require('./routes/genre.router');
 const readingLevelRouter = require('./routes/reading.level.router');
+const bookRouter = require('./routes/book.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -27,6 +28,7 @@ app.use(passport.session());
 app.use('/api/user', userRouter);
 app.use('/api/genre', genreRouter);
 app.use('/api/readingLevels', readingLevelRouter);
+app.use('/api/books', bookRouter);
 
 // Serve static files
 app.use(express.static('build'));
