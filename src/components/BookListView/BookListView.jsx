@@ -13,11 +13,16 @@ function BookListView() {
   useEffect(() => {
     dispatch({
       type: 'FETCH_BOOKS'
+    });
+    dispatch({
+      type: 'FETCH_ORDERS'
     })
   }, [])
 
   const books = useSelector(store => store.books);
   const user = useSelector(store => store.user);
+  const orders = useSelector(store => store.orders);
+  console.log('orders in booklist view', orders)
 
   const handleAddToCart = (book) => {
     dispatch({

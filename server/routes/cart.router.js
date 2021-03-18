@@ -3,16 +3,16 @@ const router = express.Router();
 const pool = require('../modules/pool');
 
 router.get('/', (req, res) => {
-  const userId = req.user.id;
-  const query = 'SELECT "books".id, "books".title, "books".isbn, "books".author FROM "orders" JOIN "orders_books" ON "orders_books".order_id="orders".id JOIN "books" ON "books".id="orders_books".book_id WHERE "user_id"=$1 GROUP BY "user".id;';
-  pool.query(query, [userId])
-    .then(result => {
-      res.send(result.rows)
-    })
-    .catch(err => {
-      console.log('error in GET /cart', err)
-      res.sendStatus(500);
-    })
+  // const userId = req.user.id;
+  // const query = 'SELECT "books".id, "books".title, "books".isbn, "books".author FROM "orders" JOIN "orders_books" ON "orders_books".order_id="orders".id JOIN "books" ON "books".id="orders_books".book_id WHERE "user_id"=$1 GROUP BY "orders".user_id;';
+  // pool.query(query, [userId])
+  //   .then(result => {
+  //     res.send(result.rows)
+  //   })
+  //   .catch(err => {
+  //     console.log('error in GET /cart', err)
+  //     res.sendStatus(500);
+  //   })
 })
 
 router.post('/', (req, res) => {
