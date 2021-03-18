@@ -21,7 +21,6 @@ function* fetchCart() {
 }
 
 function* removeFromCart(action) {
-  console.log('action', action);
   try {
     yield axios.delete('/api/cart', action.payload);
     yield put({ type: 'FETCH_CART' });

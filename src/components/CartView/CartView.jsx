@@ -4,18 +4,12 @@ import { useDispatch, useSelector } from "react-redux"
 function CartView() {
 
   const cart = useSelector((store) => store.cart);
-  const user = useSelector((store) => store.user);
-  console.log('cart', cart)
 
   const dispatch = useDispatch();
 
-  console.log('user', user);
-
   useEffect(() => {
-    console.log('user id to fetch cart', user.id)
     dispatch({
-      type: 'FETCH_CART',
-      payload: {userId: user.id}
+      type: 'FETCH_CART'
     })
   }, [])
 
