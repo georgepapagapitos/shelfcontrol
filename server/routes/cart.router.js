@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../modules/pool');
 
 router.post('/', (req, res) => {
-  const userId = req.body.user.id;
+  const userId = req.user.id;
   const date = req.body.date;
   const book = req.body.book;
   console.log('book', book)
@@ -26,14 +26,13 @@ router.post('/', (req, res) => {
     })
 })
 
-router.get('/:id', (req, res) => {
-  const userId = req.params.id;
-  console.log('user id', req.params.id);
-  const query = 'SELECT "books".id, "books".title FROM "orders" JOIN "orders_books" ON "orders_books".order_id="orders".id JOIN "books" ON "books".id="orders_books".book_id WHERE "user_id"=$1 GROUP BY "books".id;';
+router.get('/', (req, res) => {
+  const userId = req.user.id;
+  const query = 'SELECT "books".id, "books".title, "books".isbn FROM "orders" JOIN "orders_books" ON "orders_books".order_id="orders".id JOIN "books" ON "books".id="orders_books".book_id WHERE "user_id"=$1 GROUP BY "books".id;';
   pool.query(query, [userId])
     .then(result => {
       console.log('result.rows', result.rows)
-      res.send(result.rows[0])
+      res.send(result.rows)
     })
     .catch(err => {
       console.log('error in get /cart/id', err)
@@ -42,8 +41,8 @@ router.get('/:id', (req, res) => {
 })
 
 router.delete('/', (req, res) => {
-  const userId = req.body;
-  console.log('delete', req.body);
+  const userId = req.user.id;
+  console.log('delete', userId);
 })
 
 module.exports = router;

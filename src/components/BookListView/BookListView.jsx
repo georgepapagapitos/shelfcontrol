@@ -23,7 +23,6 @@ function BookListView() {
     dispatch({
       type: 'ADD_TO_CART',
       payload: {
-        user: user,
         book: book,
         date: moment().format()}
     })

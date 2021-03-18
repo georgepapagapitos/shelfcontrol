@@ -12,9 +12,10 @@ function CartView() {
   console.log('user', user);
 
   useEffect(() => {
+    console.log('user id to fetch cart', user.id)
     dispatch({
       type: 'FETCH_CART',
-      payload: user.id
+      payload: {userId: user.id}
     })
   }, [])
 
@@ -22,15 +23,14 @@ function CartView() {
     console.log('remove book from cart', book);
     dispatch({
       type: 'REMOVE_FROM_CART',
-      payload: user.id
+      payload: book
     })
     dispatch({
       type: 'INCREASE_QUANTITY',
       payload: {isbn: book.isbn}
     })
     dispatch({
-      type: 'FETCH CART',
-      payload: user.id
+      type: 'FETCH_CART'
     })
   }
 
@@ -39,14 +39,14 @@ function CartView() {
       <h2>Current Cart:</h2>
       <div>
         <ul>
-          {/* {cart.map(book => {
+          {cart.map(book => {
             return (
               <li key={book.id}>
                 {book.title} by {book.author}
                 <button type="button" onClick={() => handleRemove(book)}>Remove</button>
               </li>
             )
-          })} */}
+          })}
         </ul>
       </div>
     </div>
