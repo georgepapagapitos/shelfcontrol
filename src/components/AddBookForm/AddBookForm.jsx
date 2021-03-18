@@ -4,21 +4,28 @@ import Popup from 'reactjs-popup';
 import './AddBookForm.css';
 import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 function AddBookForm() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch({
-      type: 'FETCH_GENRES',
+      type: 'FETCH_GENRES'
     });
     dispatch({
       type: 'FETCH_READING_GRADE_LEVELS'
     });
+    dispatch({
+      type: 'FETCH_BOOKS'
+    })
   }, []);
 
   const genres = useSelector((store) => store.genres);
   const readingGradeLevels = useSelector((store) => store.readingGradeLevels);
+  const books = useSelector((store => store.books));
+  console.log('books', books);
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -31,6 +38,7 @@ function AddBookForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const bookToAdd = {
       title,
       author,
@@ -41,16 +49,28 @@ function AddBookForm() {
       readingGradeLevel,
       infoPage
     };
-
     console.log('booktoAdd', bookToAdd);
-    dispatch({
-      type: 'ADD_BOOK',
-      payload: bookToAdd
-    });
 
-    handleReset();
+    let doesBookExist = false;
 
-  };
+    for(let book of books) {
+      if(book.isbn === isbn) {
+        doesBookExist = true;
+      }
+    }
+
+    if(doesBookExist) {
+      dispatch({
+        type: 'INCREASE_QUANTITY',
+        payload: {isbn: isbn}
+      })
+    } else {
+        dispatch({
+          type: 'ADD_BOOK',
+          payload: bookToAdd
+        })
+    };
+  }
 
   const handleReset = () => {
     setTitle('');
@@ -59,6 +79,7 @@ function AddBookForm() {
     setDescription('');
     setBookCoverImage('');
     setSelectedGenre('');
+    setIsbn('');
   }
 
   const handleScan = () => {

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Typography } from "@material-ui/core";
+import Swal from 'sweetalert2';
 import moment from 'moment';
 
 import './BookListView.css';
@@ -16,6 +17,8 @@ function BookListView() {
   }, [])
 
   const books = useSelector(store => store.books);
+  console.log('books', books)
+  const user = useSelector(store => store.user);
 
   const handleAddToCart = (book) => {
     console.log('in add', book);
@@ -27,16 +30,40 @@ function BookListView() {
     })
     dispatch({
       type: 'TOGGLE_AVAILABLE',
-      payload: book.id
+      payload: book.isbn
     })
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Added Book To Cart',
+      text: `${book.title}`
+    })
+
   }
 
   const handleDelete = (bookId) => {
     console.log('in delete', bookId);
-    dispatch({
-      type: 'DELETE_BOOK',
-      payload: { bookId }
+    Swal.fire({
+      title: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch({
+          type: 'DELETE_BOOK',
+          payload: { bookId }
+        })
+        Swal.fire(
+          'Deleted!',
+          'Book has been deleted.',
+          'success'
+        )
+      }
     })
+    
   }
 
   return (
@@ -53,8 +80,10 @@ function BookListView() {
               <a target="_blank" href={book.info_page}>
                 <img className="book-cover" src={book.book_cover_image} alt={book.title} />
               </a>
-                <button onClick={() => handleAddToCart(book)}>Add To Cart</button>
-                <button onClick={() => handleDelete(book.id)}>Delete</button>
+              <p>Recommended Reading Level: {book.reading_grade_level}</p>
+              <hr/>
+              <button onClick={() => handleAddToCart(book)}>Add To Cart</button>
+              {(user.auth_level === 'ADMIN') && <button onClick={() => handleDelete(book.id)}>Delete</button>}
             </div>
           )
         })}
