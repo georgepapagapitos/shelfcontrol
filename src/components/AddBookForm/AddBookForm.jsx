@@ -25,7 +25,6 @@ function AddBookForm() {
   const genres = useSelector((store) => store.genres);
   const readingGradeLevels = useSelector((store) => store.readingGradeLevels);
   const books = useSelector((store => store.books));
-  console.log('books', books);
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -70,6 +69,8 @@ function AddBookForm() {
           payload: bookToAdd
         })
     };
+
+    handleReset();
   }
 
   const handleReset = () => {

@@ -17,20 +17,19 @@ function BookListView() {
   }, [])
 
   const books = useSelector(store => store.books);
-  console.log('books', books)
   const user = useSelector(store => store.user);
 
   const handleAddToCart = (book) => {
-    console.log('in add', book);
     dispatch({
       type: 'ADD_TO_CART',
-      payload: { 
+      payload: {
+        user: user,
         book: book,
         date: moment().format()}
     })
     dispatch({
-      type: 'TOGGLE_AVAILABLE',
-      payload: book.isbn
+      type: 'DECREASE_QUANTITY',
+      payload: {isbn: book.isbn}
     })
 
     Swal.fire({
@@ -82,8 +81,8 @@ function BookListView() {
               </a>
               <p>Recommended Reading Level: {book.reading_grade_level}</p>
               <hr/>
-              <button onClick={() => handleAddToCart(book)}>Add To Cart</button>
               {(user.auth_level === 'ADMIN') && <button onClick={() => handleDelete(book.id)}>Delete</button>}
+              <button onClick={() => handleAddToCart(book)}>Add To Cart</button>
             </div>
           )
         })}

@@ -4,7 +4,6 @@ import axios from 'axios';
 function* fetchBooks() {
   try {
     const books = yield axios.get('/api/book');
-    console.log('get all books:', books.data)
     yield put({ type: 'SET_BOOKS', payload: books.data});
   }
   catch(err) {
@@ -44,7 +43,7 @@ function* toggleAvailable(action) {
 
 function* increaseQuantity(action) {
   try {
-    yield axios.put('/api/book/increase', action.payload)
+    yield axios.put('/api/book/increase', action.payload);
     yield put({ type: 'FETCH_BOOKS' });
   }
   catch(err) {
@@ -53,7 +52,13 @@ function* increaseQuantity(action) {
 }
 
 function* decreaseQuantity(action) {
-
+  try {
+    yield axios.put('./api/book/decrease', action.payload);
+    yield put({ type: 'FETCH_BOOKS' });
+  }
+  catch(err) {
+    console.log('error in decreaseQuantity', err);
+  }
 }
 
 

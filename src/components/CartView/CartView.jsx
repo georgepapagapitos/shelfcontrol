@@ -1,22 +1,36 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 
 function CartView() {
 
+  const cart = useSelector((store) => store.cart);
+  const user = useSelector((store) => store.user);
+  console.log('cart', cart)
+
   const dispatch = useDispatch();
-  const currentCart = useSelector((store) => store.cart);
+
+  console.log('user', user);
+
+  useEffect(() => {
+    dispatch({
+      type: 'FETCH_CART',
+      payload: user.id
+    })
+  }, [])
 
   const handleRemove = (book) => {
     console.log('remove book from cart', book);
     dispatch({
       type: 'REMOVE_FROM_CART',
-      payload: book
+      payload: user.id
     })
     dispatch({
-      type: 'TOGGLE_AVAILABLE',
-      payload: book.id
+      type: 'INCREASE_QUANTITY',
+      payload: {isbn: book.isbn}
     })
     dispatch({
-      type: 'FETCH CART'
+      type: 'FETCH CART',
+      payload: user.id
     })
   }
 
@@ -25,14 +39,14 @@ function CartView() {
       <h2>Current Cart:</h2>
       <div>
         <ul>
-          {currentCart.map(item => {
+          {/* {cart.map(book => {
             return (
-              <li key={item.book.id}>
-                {item.book.title} by {item.book.author}
-                <button type="button" onClick={() => handleRemove(item.book)}>Remove</button>
+              <li key={book.id}>
+                {book.title} by {book.author}
+                <button type="button" onClick={() => handleRemove(book)}>Remove</button>
               </li>
             )
-          })}
+          })} */}
         </ul>
       </div>
     </div>
