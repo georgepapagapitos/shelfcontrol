@@ -30,6 +30,12 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
+    dispatch({
+      type: 'FETCH_ORDERS'
+    })
+    dispatch({
+      type: 'FETCH_CART'
+    })
   }, [dispatch]);
 
   return (

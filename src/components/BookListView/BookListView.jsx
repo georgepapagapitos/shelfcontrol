@@ -17,12 +17,14 @@ function BookListView() {
     dispatch({
       type: 'FETCH_ORDERS'
     })
+    dispatch({
+      type: 'FETCH_CART'
+    })
   }, [])
 
   const books = useSelector(store => store.books);
   const user = useSelector(store => store.user);
   const orders = useSelector(store => store.orders);
-  console.log('orders in booklist view', orders)
 
   let activeOrder = {
     id: '',
@@ -35,8 +37,11 @@ function BookListView() {
         id: order.id,
         isActive: true
       }
+      break;
     }
   }
+
+  console.log('active order', activeOrder);
 
   const handleAddToCart = (book) => {
     if(activeOrder.isActive) {
@@ -61,6 +66,9 @@ function BookListView() {
     dispatch({
       type: 'DECREASE_QUANTITY',
       payload: {isbn: book.isbn}
+    })
+    dispatch({
+      type: 'FETCH_ORDERS'
     })
 
     Swal.fire({

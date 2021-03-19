@@ -4,7 +4,6 @@ import axios from 'axios';
 function* fetchOrders() {
   try {
     const orders = yield axios.get('/api/order');
-    console.log('orders in fetchOrders', orders)
     yield put({ type: 'SET_ORDERS', payload: orders.data });
   }
   catch(err) {

@@ -49,7 +49,8 @@ function UserView() {
             <tr key={i}>
               <td>{order.title}</td>
               <td>{order.order_date}</td>
-              {order.is_fulfilled ? <td><button type="button" onClick={handleFinished}>Finished</button></td> : <td>On the way!</td>}
+              {(order.is_fulfilled && order.date_completed === null) ? <td><button type="button" onClick={handleFinished}>Finished</button></td> : 
+              (order.is_fulfilled && order.date_completed) ? <td>Book Finished!</td> : <td>On the way!</td>}
             </tr>
           )
         })}

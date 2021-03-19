@@ -4,6 +4,8 @@ import axios from 'axios';
 function* addToNewCart(action) {
   try {
     yield axios.post('/api/cart/new', action.payload);
+    yield put({ type: 'FETCH_CART' });
+    yield put({ type: 'FETCH_ORDERS' });
   }
   catch(err) {
     console.log('error in addToCart', err);

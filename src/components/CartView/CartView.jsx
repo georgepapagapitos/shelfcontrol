@@ -11,7 +11,7 @@ function CartView() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const date = moment().format('L');
+  const date = moment().format();
 
   useEffect(() => {
     dispatch({

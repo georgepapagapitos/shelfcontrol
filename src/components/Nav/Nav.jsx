@@ -47,7 +47,7 @@ function Nav() {
               All Books
             </Link>
 
-            <Link className="navLink" to="/cart">
+            <Link to="/cart">
               <IconButton aria-label="cart">
                 <StyledBadge badgeContent={cart.length} color="secondary">
                   <ShoppingCartIcon />
@@ -59,9 +59,9 @@ function Nav() {
           </>
         )}
 
-        <Link className="navLink" to="/about">
+        {/* <Link className="navLink" to="/about">
           About
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
