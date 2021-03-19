@@ -1,12 +1,22 @@
 import { takeLatest, put } from '@redux-saga/core/effects';
 import axios from 'axios';
 
-function* addToCart(action) {
+function* addToNewCart(action) {
   try {
-    yield axios.post('/api/cart', action.payload);
+    yield axios.post('/api/cart/new', action.payload);
   }
   catch(err) {
     console.log('error in addToCart', err);
+  }
+}
+
+function* addToExistingCart(action) {
+  try {
+    yield axios.post('/api/cart', action.payload);
+    yield put({ type: 'FETCH_CART' });
+  }
+  catch(err) {
+    console.log('error in addToExistingCart', err);
   }
 }
 
@@ -21,8 +31,9 @@ function* fetchCart() {
 }
 
 function* removeFromCart(action) {
+  console.log('remove action', action.payload);
   try {
-    yield axios.delete('/api/cart', action.payload);
+    yield axios.delete(`/api/cart/${action.payload.bookId}`);
     yield put({ type: 'FETCH_CART' });
   }
   catch(err) {
@@ -31,7 +42,8 @@ function* removeFromCart(action) {
 }
 
 function* cartSaga() {
-  yield takeLatest('ADD_TO_CART', addToCart);
+  yield takeLatest('ADD_TO_NEW_CART', addToNewCart);
+  yield takeLatest('ADD_TO_EXISTING_CART', addToExistingCart)
   yield takeLatest('FETCH_CART', fetchCart);
   yield takeLatest('REMOVE_FROM_CART', removeFromCart);
 }

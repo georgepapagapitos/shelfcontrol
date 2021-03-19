@@ -105,17 +105,13 @@ function App() {
             <LandingPage />
           </ProtectedRoute>
 
-          <Route exact path="/add">
-            <AddBookForm />
-          </Route>
-
           <Route exact path="/cart">
             <CartView />
           </Route>
 
-          <Route exact path='/books'>
+          <ProtectedRoute exact path='/books'>
             <BookListView />
-          </Route>
+          </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>

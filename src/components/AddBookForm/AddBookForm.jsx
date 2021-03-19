@@ -70,6 +70,11 @@ function AddBookForm() {
         })
     };
 
+    Swal.fire({
+      icon: 'success',
+      title: 'Book added to inventory'
+    })
+
     handleReset();
   }
 

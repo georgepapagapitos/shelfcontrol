@@ -17,7 +17,7 @@ function CartView() {
     console.log('remove book from cart', book);
     dispatch({
       type: 'REMOVE_FROM_CART',
-      payload: book
+      payload: {bookId: book.id}
     })
     dispatch({
       type: 'INCREASE_QUANTITY',

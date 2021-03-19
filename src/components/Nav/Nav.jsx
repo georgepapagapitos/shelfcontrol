@@ -27,8 +27,6 @@ function Nav() {
           {loginLinkData.text}
         </Link>
 
-        {(user.id && user.auth_level === 'ADMIN') && <Link className="navLink" to="/add">Add Books</Link>}
-
         {user.id && (
           <>
             <Link className="navLink" to="/books">

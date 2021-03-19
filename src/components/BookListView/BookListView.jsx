@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Typography } from "@material-ui/core";
+import AddBookForm from '../AddBookForm/AddBookForm';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 
@@ -24,13 +25,42 @@ function BookListView() {
   const orders = useSelector(store => store.orders);
   console.log('orders in booklist view', orders)
 
+  let activeOrder = {
+    id: '',
+    isActive: false
+  };
+
+  for(let order of orders) {
+    if(order.is_active === true) {
+      activeOrder = {
+        id: order.id,
+        isActive: true
+      }
+    }
+  }
+
   const handleAddToCart = (book) => {
-    dispatch({
-      type: 'ADD_TO_CART',
-      payload: {
-        book: book,
-        date: moment().format()}
-    })
+    if(activeOrder.isActive) {
+      console.log('active order');
+      dispatch({
+        type: 'ADD_TO_EXISTING_CART',
+        payload: {
+          activeOrderId: activeOrder.id,
+          book: book,
+          date: moment().format()
+        }
+      })
+    } else {
+      console.log('creating new order')
+      dispatch({
+        type: 'ADD_TO_NEW_CART',
+        payload: {
+          book: book,
+          date: moment().format()
+        }
+      })
+    }
+
     dispatch({
       type: 'DECREASE_QUANTITY',
       payload: {isbn: book.isbn}
@@ -41,7 +71,6 @@ function BookListView() {
       title: 'Added Book To Cart',
       text: `${book.title}`
     })
-
   }
 
   const handleDelete = (bookId) => {
@@ -74,6 +103,7 @@ function BookListView() {
       <Typography variant="h2" component="div" align="center">
         Available Books
       </Typography>
+      {user.auth_level === 'ADMIN' && <AddBookForm />}
       <div className="books">
         {books.map(book => {
           return (
@@ -86,7 +116,7 @@ function BookListView() {
               <p>Recommended Reading Level: {book.reading_grade_level}</p>
               <hr/>
               {(user.auth_level === 'ADMIN') && <button onClick={() => handleDelete(book.id)}>Delete</button>}
-              <button onClick={() => handleAddToCart(book)}>Add To Cart</button>
+              {(user.auth_level === 'USER') && <button onClick={() => handleAddToCart(book)}>Add To Cart</button>}
             </div>
           )
         })}

@@ -3,34 +3,26 @@ const router = express.Router();
 const pool = require('../modules/pool');
 
 router.get('/', (req, res) => {
-  // const userId = req.user.id;
-  // const query = 'SELECT "books".id, "books".title, "books".isbn, "books".author FROM "orders" JOIN "orders_books" ON "orders_books".order_id="orders".id JOIN "books" ON "books".id="orders_books".book_id WHERE "user_id"=$1 GROUP BY "orders".user_id;';
-  // pool.query(query, [userId])
-  //   .then(result => {
-  //     res.send(result.rows)
-  //   })
-  //   .catch(err => {
-  //     console.log('error in GET /cart', err)
-  //     res.sendStatus(500);
-  //   })
+  const userId = req.user.id;
+  const query = 'SELECT "books".id, "books".title, "books".isbn, "books".author, "orders_books".order_id, "orders".is_active, "orders".user_id FROM "books" JOIN "orders_books" ON "books".id="orders_books".book_id JOIN "orders" ON "orders".id="orders_books".order_id WHERE "orders".user_id=$1;';
+  pool.query(query, [userId])
+    .then(result => {
+      res.send(result.rows)
+    })
+    .catch(err => {
+      console.log('error in GET /cart', err)
+      res.sendStatus(500);
+    })
 })
 
 router.post('/', (req, res) => {
-  const userId = req.user.id;
-  const date = req.body.date;
-  const query1 = `INSERT INTO "orders" ("user_id", "order_date") VALUES ($1, $2) RETURNING "id";`;
-  pool.query(query1, [userId, date])
-    .then((result) => {
-      const book = req.body.book;
-      const query2 = 'INSERT INTO "orders_books" ("order_id", "book_id") VALUES ($1, $2);';
-      pool.query(query2, [result.rows[0].id, book.id])
-        .then(() => {
-          res.sendStatus(201);
-        })
-        .catch(err => {
-          console.log('error in nested POST /cart', err);
-          res.sendStatus(500);
-        })
+  const activeOrderId = req.body.activeOrderId;
+  const book = req.body.book;
+  const query = `INSERT INTO "orders_books" ("order_id", "book_id") VALUES ($1, $2)`;
+  pool.query(query, [activeOrderId, book.id])
+    .then(result => {
+      console.log('book added to existing cart');
+      res.sendStatus(200);
     })
     .catch(err => {
       console.log('error in POST /cart', err);
@@ -38,10 +30,36 @@ router.post('/', (req, res) => {
     })
 })
 
-router.delete('/', (req, res) => {
+router.post('/new', (req, res) => {
   const userId = req.user.id;
+  const date = req.body.date;
+  const query = 'INSERT INTO "orders" ("user_id", "order_date") VALUES ($1, $2) RETURNING "id";';
+  pool.query(query, [userId, date])
+    .then(result => {
+      const orderId = result.rows[0].id;
+      console.log('orderId', orderId);
+      const book = req.body.book;
+      const query2 = 'INSERT INTO "orders_books" ("order_id", "book_id") VALUES ($1, $2);';
+      pool.query(query2, [orderId, book.id])
+        .then(() => {
+          console.log('added book to new cart');
+          res.sendStatus(200);
+        })
+        .catch(err => {
+          console.log('error in nested POST /cart/new', err);
+          res.sendStatus(500);
+        })
+    })
+    .catch(err => {
+      console.log('error in POST /cart/new', err);
+      res.sendStatus(500);
+    })
+})
+
+router.delete('/:id', (req, res) => {
+  const bookId = req.params.id;
   const query = 'DELETE FROM "orders_books" WHERE "book_id"=$1;';
-  pool.query(query, [userId])
+  pool.query(query, [bookId])
     .then(result => {
       res.sendStatus(200);
     })
