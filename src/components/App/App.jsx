@@ -6,7 +6,7 @@ import {
   Switch,
 } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
@@ -30,13 +30,9 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
-    dispatch({
-      type: 'FETCH_ORDERS'
-    })
-    dispatch({
-      type: 'FETCH_CART'
-    })
   }, [dispatch]);
+
+  const user = useSelector(store => store.user);
 
   return (
     <Router>
@@ -111,9 +107,9 @@ function App() {
             <LandingPage />
           </ProtectedRoute>
 
-          <Route exact path="/cart">
+          <ProtectedRoute exact path="/cart">
             <CartView />
-          </Route>
+          </ProtectedRoute>
 
           <ProtectedRoute exact path='/books'>
             <BookListView />

@@ -54,6 +54,7 @@ function AddBookForm() {
 
     for(let book of books) {
       if(book.isbn === isbn) {
+        console.log('MATCH!!!!!');
         doesBookExist = true;
       }
     }
