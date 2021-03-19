@@ -1,6 +1,8 @@
 import React from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import {useSelector} from 'react-redux';
+import AdminView from '../AdminView/AdminView';
+import UserView from '../UserView/UserView';
 
 function UserPage() {
   // this component doesn't do much to start, just renders some user reducer info to the DOM
@@ -10,14 +12,12 @@ function UserPage() {
     <div className="container">
 
       {user.auth_level === 'ADMIN' && 
-        <h1>ADMIN PAGE</h1>
+        <AdminView />
       }
 
       {user.auth_level === 'USER' &&
-        <>
-        <h2>Welcome, {user.username}!</h2>
-        <p>Your ID is: {user.id}</p>
-        </>}
+        <UserView user={user}/>
+      }
 
         <LogOutButton className="btn" />
     </div>
