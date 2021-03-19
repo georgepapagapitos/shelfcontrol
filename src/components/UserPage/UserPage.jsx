@@ -16,7 +16,7 @@ function UserPage() {
       }
 
       {user.auth_level === 'USER' &&
-        <UserView user={user}/>
+        <UserView />
       }
 
         <LogOutButton className="btn" />
