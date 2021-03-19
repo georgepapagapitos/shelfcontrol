@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Typography } from "@material-ui/core";
 import AddBookForm from '../AddBookForm/AddBookForm';
 import Swal from 'sweetalert2';
-import moment from 'moment';
 
 import './BookListView.css';
 

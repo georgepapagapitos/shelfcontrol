@@ -41,11 +41,23 @@ function* removeFromCart(action) {
   }
 }
 
+function* checkout(action) {
+  console.log('checkout action', action.payload);
+  try {
+    yield axios.put('/api/cart', action.payload);
+    yield put({ type: 'FETCH_CART' });
+  }
+  catch(err) {
+    console.log('error in checkout', err);
+  }
+}
+
 function* cartSaga() {
   yield takeLatest('ADD_TO_NEW_CART', addToNewCart);
   yield takeLatest('ADD_TO_EXISTING_CART', addToExistingCart)
   yield takeLatest('FETCH_CART', fetchCart);
   yield takeLatest('REMOVE_FROM_CART', removeFromCart);
+  yield takeLatest('CHECKOUT', checkout);
 }
 
 export default cartSaga;

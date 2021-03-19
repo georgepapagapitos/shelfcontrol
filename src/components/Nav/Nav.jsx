@@ -3,9 +3,23 @@ import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import './Nav.css';
 import {useSelector} from 'react-redux';
+import { IconButton } from '@material-ui/core';
+import Badge from '@material-ui/core/Badge';
+import { withStyles } from '@material-ui/core/styles';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}))(Badge);
 
 function Nav() {
   const user = useSelector((store) => store.user);
+  const cart = useSelector((store) => store.cart);
 
   let loginLinkData = {
     path: '/login',
@@ -32,9 +46,15 @@ function Nav() {
             <Link className="navLink" to="/books">
               All Books
             </Link>
+
             <Link className="navLink" to="/cart">
-              Cart
+              <IconButton aria-label="cart">
+                <StyledBadge badgeContent={cart.length} color="secondary">
+                  <ShoppingCartIcon />
+                </StyledBadge>
+              </IconButton>
             </Link>
+
             <LogOutButton className="navLink" />
           </>
         )}

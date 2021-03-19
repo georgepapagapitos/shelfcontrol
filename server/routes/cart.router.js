@@ -4,7 +4,7 @@ const pool = require('../modules/pool');
 
 router.get('/', (req, res) => {
   const userId = req.user.id;
-  const query = 'SELECT "books".id, "books".title, "books".isbn, "books".author, "orders_books".order_id, "orders".is_active, "orders".user_id FROM "books" JOIN "orders_books" ON "books".id="orders_books".book_id JOIN "orders" ON "orders".id="orders_books".order_id WHERE "orders".user_id=$1;';
+  const query = 'SELECT "books".id, "books".title, "books".isbn, "books".author, "orders_books".order_id, "orders".is_active, "orders".user_id FROM "books" JOIN "orders_books" ON "books".id="orders_books".book_id JOIN "orders" ON "orders".id="orders_books".order_id WHERE "orders".user_id=$1 AND "orders".is_active=true;';
   pool.query(query, [userId])
     .then(result => {
       res.send(result.rows)
@@ -64,6 +64,23 @@ router.delete('/:id', (req, res) => {
     })
     .catch(err => {
       console.log('error in DELETE /cart', err)
+    })
+})
+
+router.put('/', (req, res) => {
+  console.log('in put', req.body);
+  const date = req.body.date;
+  const orderId = req.body.cart[0].order_id;
+  const userId = req.user.id;
+  console.log('order id', orderId, userId);
+  const query = 'UPDATE "orders" SET "is_active"=false, "order_date"=$1 WHERE "id"=$2 AND "user_id"=$3;';
+  pool.query(query, [date, orderId, userId])
+    .then(result => {
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log('error in PUT /cart', err);
+      res.sendStatus(500);
     })
 })
 
