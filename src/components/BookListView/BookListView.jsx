@@ -46,8 +46,7 @@ function BookListView() {
         type: 'ADD_TO_EXISTING_CART',
         payload: {
           activeOrderId: activeOrder.id,
-          book: book,
-          date: moment().format()
+          book: book
         }
       })
     } else {
@@ -55,8 +54,7 @@ function BookListView() {
       dispatch({
         type: 'ADD_TO_NEW_CART',
         payload: {
-          book: book,
-          date: moment().format()
+          book: book
         }
       })
     }

@@ -28,6 +28,10 @@ function CartView() {
     })
   }
 
+  const handleCheckout = (cart) => {
+    console.log('in handlecheckout', cart);
+  }
+
   return (
     <div className="container">
       <h2>Current Cart:</h2>
@@ -42,6 +46,7 @@ function CartView() {
             )
           })}
         </ul>
+        <button type="button" onClick={() => handleCheckout(cart)}>Checkout</button>
       </div>
     </div>
   )
