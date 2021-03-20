@@ -111,7 +111,8 @@ function BookListView() {
       {user.auth_level === 'ADMIN' && <AddBookForm />}
       <div className="books">
         {books.map(book => {
-          return (
+          if(book.quantity > 0) {
+            return (
             <div key={book.id} className="card">
               <h3>{book.title}</h3>
               <hr/>
@@ -124,6 +125,7 @@ function BookListView() {
               {(user.auth_level === 'USER') && <button onClick={() => handleAddToCart(book)}>Add To Cart</button>}
             </div>
           )
+          }
         })}
       </div>
     </div>

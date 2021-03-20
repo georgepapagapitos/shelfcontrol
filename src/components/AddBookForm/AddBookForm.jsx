@@ -54,7 +54,6 @@ function AddBookForm() {
 
     for(let book of books) {
       if(book.isbn === isbn) {
-        console.log('MATCH!!!!!');
         doesBookExist = true;
       }
     }
@@ -113,7 +112,6 @@ function AddBookForm() {
           }
         }
         if(doesGenreExist) {
-            console.log('genre exists');
             setSelectedGenre(genreToAdd);
           } else {
             dispatch({

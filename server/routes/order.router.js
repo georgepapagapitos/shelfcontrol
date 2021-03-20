@@ -16,4 +16,34 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get('/all', (req, res) => {
+  const query = `SELECT "orders".id, "users".first_name, "users".last_name, "orders".is_fulfilled, JSON_AGG("books".title) AS "books"
+                  FROM "users"
+                  JOIN "orders" ON "users".id="orders".user_id
+                  JOIN "orders_books" ON "orders".id="orders_books".order_id
+                  JOIN "books" ON "orders_books".book_id="books".id
+                  GROUP BY "orders".id, "users".first_name, "users".last_name;`;
+  pool.query(query)
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(err => {
+      console.log('error in GET /order/all', err);
+      res.sendStatus(500);
+    })
+})
+
+router.put('/', (req, res) => {
+  const orderId = req.body.orderId;
+  const query = 'UPDATE "orders" SET "is_fulfilled"=true WHERE "id"=$1;';
+  pool.query(query, [orderId])
+    .then(result => {
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log('error in PUT /order', err);
+      res.sendStatus(500);
+    })
+})
+
 module.exports = router;
