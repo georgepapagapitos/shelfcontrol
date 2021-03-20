@@ -11,7 +11,10 @@ function UserView() {
   useEffect(() => {
     dispatch({
       type: 'FETCH_USER_ORDERS'
-    })
+    });
+    dispatch({
+      type: 'FETCH_ACTIVE_CART'
+    });
   }, [])
 
   const orders = useSelector((store) => store.orders);

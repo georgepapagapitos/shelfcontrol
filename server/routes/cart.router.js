@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
   const query = `INSERT INTO "orders_books" ("order_id", "book_id") VALUES ($1, $2)`;
   pool.query(query, [activeOrderId, book.id])
     .then(result => {
-      console.log('book added to existing cart');
+      console.log('book added to existing cart', activeOrderId);
       res.sendStatus(200);
     })
     .catch(err => {
@@ -46,7 +46,7 @@ router.post('/new', (req, res) => {
       const query2 = 'INSERT INTO "orders_books" ("order_id", "book_id") VALUES ($1, $2);';
       pool.query(query2, [orderId, book.id])
         .then(() => {
-          console.log('added book to new cart');
+          console.log('added book to new cart', orderId);
           res.sendStatus(200);
         })
         .catch(err => {
@@ -76,8 +76,8 @@ router.put('/', (req, res) => {
   console.log('in put', req.body);
   const date = req.body.date;
   const orderId = req.body.cart[0].order_id;
+  console.log('orderid to checkout', orderId);
   const userId = req.user.id;
-  console.log('order id', orderId, userId);
   const query = 'UPDATE "orders" SET "is_active"=false, "order_date"=$1 WHERE "id"=$2 AND "user_id"=$3;';
   pool.query(query, [date, orderId, userId])
     .then(result => {

@@ -16,8 +16,8 @@ function BookListView() {
       type: 'FETCH_BOOKS'
     });
     dispatch({
-      type: 'FETCH_ACTIVE_ORDERS'
-    });
+      type: 'FETCH_USER_ORDERS'
+    })
     dispatch({
       type: 'FETCH_ACTIVE_CART'
     });
@@ -26,10 +26,12 @@ function BookListView() {
   const books = useSelector(store => store.books);
   const user = useSelector(store => store.user);
   const orders = useSelector(store => store.orders);
+  const cart = useSelector(store => store.cart);
   console.log('orders', orders);
+  console.log('cart', cart);
 
   const handleAddToCart = (book) => {
-    if(orders.length === 1) {
+    if(orders.length) {
       console.log('active order');
       dispatch({
         type: 'ADD_TO_EXISTING_CART',
@@ -47,16 +49,14 @@ function BookListView() {
         }
       })
     }
-
     dispatch({
       type: 'DECREASE_QUANTITY',
       payload: {bookId: book.id}
     })
-
     Swal.fire({
       icon: 'success',
       title: 'Added Book To Cart',
-      text: `${book.title}`
+      text: `${book.title}`,
     })
   }
 
