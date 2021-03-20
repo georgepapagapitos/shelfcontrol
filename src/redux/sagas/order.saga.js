@@ -1,7 +1,7 @@
 import { takeLatest, put } from '@redux-saga/core/effects';
 import axios from 'axios';
 
-function* fetchOrders() {
+function* fetchUserOrders() {
   try {
     const orders = yield axios.get('/api/order');
     yield put({ type: 'SET_ORDERS', payload: orders.data });
@@ -14,17 +14,27 @@ function* fetchOrders() {
 function* fetchAllOrders() {
   try {
     const orders = yield axios.get('/api/order/all');
-    yield put({ type: 'SET_ORDERS', payload: orders.data});
+    yield put({ type: 'SET_ORDERS', payload: orders.data });
   }
   catch(err) {
     console.log('error in fetchAllOrders', err);
   }
 }
 
+function* fetchActiveOrders() {
+  try {
+    const orders = yield axios.get('/api/order/active');
+    yield put({ type: 'SET_ORDERS', payload: orders.data });
+  }
+  catch(err) {
+    console.log('error in fetchActiveOrders', err);
+  }
+}
+
 function* markOrderSent(action) {
   try {
     yield axios.put('/api/order', {orderId: action.payload.orderId});
-    yield put({ type: 'FETCH_ORDERS' });
+    yield put({ type: 'FETCH_ALL_ORDERS' });
   }
   catch(err) {
     console.log('error in markOrderSent', err);
@@ -32,8 +42,9 @@ function* markOrderSent(action) {
 }
 
 function* orderSaga() {
-  yield takeLatest('FETCH_ORDERS', fetchOrders);
+  yield takeLatest('FETCH_USER_ORDERS', fetchUserOrders);
   yield takeLatest('FETCH_ALL_ORDERS', fetchAllOrders);
+  yield takeLatest('FETCH_ACTIVE_ORDERS', fetchActiveOrders);
   yield takeLatest('MARK_ORDER_SENT', markOrderSent);
 }
 

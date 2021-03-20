@@ -10,12 +10,12 @@ function UserView() {
 
   useEffect(() => {
     dispatch({
-      type: 'FETCH_ORDERS'
+      type: 'FETCH_USER_ORDERS'
     })
   }, [])
 
   const orders = useSelector((store) => store.orders);
-
+  console.log('orders', orders);
   const handleFinished = () => {
     console.log('finished');
   }
@@ -45,7 +45,8 @@ function UserView() {
         </thead>
         <tbody>
         {orders.map((order, i) => {
-          return (
+          if(!order.is_active) {
+            return (
             <tr key={i}>
               <td>{order.title}</td>
               <td>{order.order_date}</td>
@@ -53,6 +54,7 @@ function UserView() {
               (order.is_fulfilled && order.date_completed) ? <td>Book Finished!</td> : <td>On the way!</td>}
             </tr>
           )
+          }
         })}
         </tbody>
       </table>

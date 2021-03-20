@@ -55,10 +55,10 @@ router.delete('/:id', (req, res) => {
 })
 
 router.put('/decrease', (req, res) => {
-  const isbn = req.body.isbn;
-  console.log('book isbn to decrease quantity:', isbn);
-  const query = 'UPDATE "books" SET "quantity" = "quantity" - 1 WHERE "isbn"=$1;';
-  pool.query(query, [isbn])
+  const bookId = req.body.bookId;
+  console.log('book isbn to decrease quantity:', bookId);
+  const query = 'UPDATE "books" SET "quantity" = "quantity" - 1 WHERE "id"=$1;';
+  pool.query(query, [bookId])
     .then(() => {
       res.sendStatus(200);
     })

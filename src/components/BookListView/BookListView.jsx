@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { Typography } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
+import AddShoppingCartOutlinedIcon from '@material-ui/icons/AddShoppingCartOutlined';
 import AddBookForm from '../AddBookForm/AddBookForm';
 import Swal from 'sweetalert2';
 
@@ -9,47 +10,31 @@ import './BookListView.css';
 function BookListView() {
 
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch({
       type: 'FETCH_BOOKS'
     });
     dispatch({
-      type: 'FETCH_ORDERS'
-    })
+      type: 'FETCH_ACTIVE_ORDERS'
+    });
     dispatch({
-      type: 'FETCH_CART'
-    })
+      type: 'FETCH_ACTIVE_CART'
+    });
   }, [])
 
   const books = useSelector(store => store.books);
   const user = useSelector(store => store.user);
   const orders = useSelector(store => store.orders);
-
-  let activeOrder = {
-    id: '',
-    isActive: false
-  };
-
-  for(let order of orders) {
-    if(order.is_active === true) {
-      activeOrder = {
-        id: order.id,
-        isActive: true
-      }
-      break;
-    }
-  }
-
-  console.log('active order', activeOrder);
+  console.log('orders', orders);
 
   const handleAddToCart = (book) => {
-    if(activeOrder.isActive) {
+    if(orders.length === 1) {
       console.log('active order');
       dispatch({
         type: 'ADD_TO_EXISTING_CART',
         payload: {
-          activeOrderId: activeOrder.id,
+          activeOrderId: orders[0].id,
           book: book
         }
       })
@@ -65,10 +50,7 @@ function BookListView() {
 
     dispatch({
       type: 'DECREASE_QUANTITY',
-      payload: {isbn: book.isbn}
-    })
-    dispatch({
-      type: 'FETCH_ORDERS'
+      payload: {bookId: book.id}
     })
 
     Swal.fire({
@@ -114,15 +96,20 @@ function BookListView() {
           if(book.quantity > 0) {
             return (
             <div key={book.id} className="card">
-              <h3>{book.title}</h3>
+              <Typography align="center" variant="h6">
+                {book.title}
+              </Typography>
+              <Typography align="center" variant="subtitle2">
+                by {book.author}
+              </Typography>
               <hr/>
               <a target="_blank" href={book.info_page}>
                 <img className="book-cover" src={book.book_cover_image} alt={book.title} />
               </a>
-              <p>Recommended Reading Level: {book.reading_grade_level}</p>
+              <Typography align="center">Recommended Reading Level: {book.reading_grade_level}</Typography>
               <hr/>
               {(user.auth_level === 'ADMIN') && <button onClick={() => handleDelete(book.id)}>Delete</button>}
-              {(user.auth_level === 'USER') && <button onClick={() => handleAddToCart(book)}>Add To Cart</button>}
+              {(user.auth_level === 'USER') && <Button component="div" variant="contained" color="primary" onClick={() => handleAddToCart(book)}><AddShoppingCartOutlinedIcon/></Button>}
             </div>
           )
           }

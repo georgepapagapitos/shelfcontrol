@@ -15,7 +15,7 @@ function CartView() {
 
   useEffect(() => {
     dispatch({
-      type: 'FETCH_CART'
+      type: 'FETCH_ACTIVE_CART'
     })
   }, [])
 
@@ -24,14 +24,11 @@ function CartView() {
     dispatch({
       type: 'REMOVE_FROM_CART',
       payload: {bookId: book.id}
-    })
+    });
     dispatch({
       type: 'INCREASE_QUANTITY',
       payload: {isbn: book.isbn}
-    })
-    dispatch({
-      type: 'FETCH_CART'
-    })
+    });
   }
 
   const handleCheckout = (cart) => {
