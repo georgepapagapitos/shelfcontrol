@@ -34,7 +34,7 @@ function UserView() {
       <Typography variant="subtitle1" align="left" component="div">
         Your username is: {user.username}
       </Typography>
-      <hr/>
+      <Divider/>
       <Typography variant="h1" component="div" align="left">
         Book History
       </Typography>

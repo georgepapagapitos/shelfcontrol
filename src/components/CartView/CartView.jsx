@@ -27,7 +27,7 @@ function CartView() {
     });
     dispatch({
       type: 'INCREASE_QUANTITY',
-      payload: {bookId: book.id}
+      payload: {isbn: book.isbn}
     });
   }
 

@@ -68,10 +68,10 @@ router.put('/decrease', (req, res) => {
 })
 
 router.put('/increase', (req, res) => {
-  const bookId = req.body.bookId;
-  console.log('book id to increase quantity:', bookId);
-  const query = 'UPDATE "books" SET "quantity" = "quantity" + 1 WHERE "id"=$1;';
-  pool.query(query, [bookId])
+  const isbn = req.body.isbn;
+  console.log('book isbn to increase quantity:', isbn);
+  const query = 'UPDATE "books" SET "quantity" = "quantity" + 1 WHERE "isbn"=$1;';
+  pool.query(query, [isbn])
     .then(() => {
       res.sendStatus(200);
     })

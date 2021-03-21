@@ -1,9 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { Typography, Button } from "@material-ui/core";
+import { Typography, IconButton, makeStyles, Popper, Button, Divider } from "@material-ui/core";
 import AddShoppingCartOutlinedIcon from '@material-ui/icons/AddShoppingCartOutlined';
-import AddBookForm from '../AddBookForm/AddBookForm';
+import AddBook from '../AddBook/AddBook';
 import Swal from 'sweetalert2';
+import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Popup from 'reactjs-popup';
+import './BookListView.css';
+
 
 import './BookListView.css';
 
@@ -85,7 +90,7 @@ function BookListView() {
       <Typography variant="h2" component="div" align="center">
         Available Books
       </Typography>
-      {user.auth_level === 'ADMIN' && <AddBookForm />}
+      {user.auth_level === 'ADMIN' && <AddBook />}
       <div className="books">
         {books.map(book => {
           if(book.quantity > 0) {
@@ -97,14 +102,29 @@ function BookListView() {
               <Typography align="center" variant="subtitle2">
                 by {book.author}
               </Typography>
-              <hr/>
-              <a target="_blank" href={book.info_page}>
-                <img className="book-cover" src={book.book_cover_image} alt={book.title} />
-              </a>
+              <Divider/>
+              <img className="book-cover" src={book.book_cover_image} alt={book.title} />
               <Typography align="center">Recommended Reading Level: {book.reading_grade_level}</Typography>
-              <hr/>
-              {(user.auth_level === 'ADMIN') && <button onClick={() => handleDelete(book.id)}>Delete</button>}
-              {(user.auth_level === 'USER') && <Button component="div" variant="contained" color="primary" onClick={() => handleAddToCart(book)}><AddShoppingCartOutlinedIcon/></Button>}
+              <Divider/>
+              <Popup trigger={
+              <IconButton type="button" aria-label="info">
+                <InfoIcon color="primary"/>
+              </IconButton>} modal>
+              <div className="popup-content">
+                <h3>{book.title} by {book.author}</h3>
+                <h4>Genre: {book.genre_name}</h4>
+                <Divider/>
+                <h3>Description:</h3>
+                <div>
+                  <Typography>{book.description}</Typography>
+                </div>
+                <h3>{book.reading_grade_level} Reading Level</h3>
+                {user.auth_level === 'ADMIN' && <Button color="primary" variant="outlined">Edit Book</Button>}
+                {user.auth_level === 'USER' && <Button color="primary" variant="contained" onClick={() => handleAddToCart(book)}>Add To Cart</Button>}
+              </div>
+              </Popup>
+              {(user.auth_level === 'ADMIN') && <IconButton onClick={() => handleDelete(book.id)}><DeleteIcon color="secondary"/></IconButton>}
+              {(user.auth_level === 'USER') && <IconButton className="add-btn" size="medium" onClick={() => handleAddToCart(book)}><AddShoppingCartOutlinedIcon color="primary" /></IconButton>}
             </div>
           )
           }
