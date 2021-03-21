@@ -41,7 +41,6 @@ router.post('/new', (req, res) => {
   pool.query(query, [userId])
     .then(result => {
       const orderId = result.rows[0].id;
-      console.log('orderId', orderId);
       const book = req.body.book;
       const query2 = 'INSERT INTO "orders_books" ("order_id", "book_id") VALUES ($1, $2);';
       pool.query(query2, [orderId, book.id])

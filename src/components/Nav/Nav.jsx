@@ -42,11 +42,12 @@ function Nav() {
         </Link>
 
         {user.id && (
-          <>
             <Link className="navLink" to="/books">
               All Books
             </Link>
-
+        )}
+        {user.auth_level === 'USER' && (
+          <>
             <Link to="/cart">
               <IconButton aria-label="cart">
                 <StyledBadge badgeContent={cart.length} color="secondary">
@@ -54,10 +55,10 @@ function Nav() {
                 </StyledBadge>
               </IconButton>
             </Link>
-
-            <LogOutButton className="navLink" />
           </>
         )}
+
+        {user.id && <LogOutButton className="navLink" />}
 
         {/* <Link className="navLink" to="/about">
           About

@@ -18,6 +18,7 @@ function UserView() {
   }, [])
 
   const orders = useSelector((store) => store.orders);
+  console.log('orders', orders)
   const handleFinished = () => {
     console.log('finished');
   }

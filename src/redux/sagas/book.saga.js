@@ -31,16 +31,6 @@ function* deleteBook(action) {
   }
 }
 
-function* toggleAvailable(action) {
-  try {
-    yield axios.put('/api/book/update', action.payload.isbn);
-    yield put({ type: 'FETCH_BOOKS' });
-  }
-  catch(err) {
-    console.log('error in setBookUnavailable', err);
-  }
-}
-
 function* increaseQuantity(action) {
   try {
     yield axios.put('/api/book/increase', action.payload);
@@ -66,7 +56,6 @@ function* booksSaga() {
   yield takeLatest('FETCH_BOOKS', fetchBooks);
   yield takeLatest('ADD_BOOK', addBook);
   yield takeLatest('DELETE_BOOK', deleteBook);
-  yield takeLatest('TOGGLE_AVAILABLE', toggleAvailable);
   yield takeLatest('INCREASE_QUANTITY', increaseQuantity);
   yield takeLatest('DECREASE_QUANTITY', decreaseQuantity);
 }
