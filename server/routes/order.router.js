@@ -11,7 +11,6 @@ router.get('/', (req, res) => {
                   WHERE "orders".user_id=$1;`;
   pool.query(query, [userId])
     .then(result => {
-      console.log('order db results', result.rows);
       res.send(result.rows);
     })
     .catch(err => {

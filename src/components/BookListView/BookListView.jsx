@@ -16,27 +16,22 @@ function BookListView() {
       type: 'FETCH_BOOKS'
     });
     dispatch({
-      type: 'FETCH_USER_ORDERS'
-    })
-    dispatch({
       type: 'FETCH_ACTIVE_CART'
     });
   }, [])
 
   const books = useSelector(store => store.books);
   const user = useSelector(store => store.user);
-  const orders = useSelector(store => store.orders);
   const cart = useSelector(store => store.cart);
-  console.log('orders', orders);
   console.log('cart', cart);
 
   const handleAddToCart = (book) => {
-    if(orders.length) {
+    if(cart.length) {
       console.log('active order');
       dispatch({
         type: 'ADD_TO_EXISTING_CART',
         payload: {
-          activeOrderId: orders[0].id,
+          activeOrderId: cart[0].order_id,
           book: book
         }
       })

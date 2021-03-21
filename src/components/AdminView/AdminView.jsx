@@ -7,7 +7,6 @@ function AdminView() {
 
   const dispatch = useDispatch();
   const orders = useSelector((store) => store.orders);
-  console.log(orders);
 
   useEffect(() => {
     dispatch({
