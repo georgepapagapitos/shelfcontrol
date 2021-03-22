@@ -1,6 +1,7 @@
 import { Divider, Typography, makeStyles, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@material-ui/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
+import moment from 'moment';
 
 const useStyles = makeStyles({
   table: {
@@ -59,7 +60,7 @@ function UserView() {
                   {order.title}
                 </TableCell>
                 <TableCell align="right">
-                  {order.order_date}
+                  {moment(order.order_date).format('MM-DD-YYYY')}
                 </TableCell>
                 <TableCell align="right">
                   {(order.is_fulfilled && order.date_completed === null) ? <Button align="right" variant="contained" color="primary" type="button" onClick={handleFinished}>Finished</Button> : 

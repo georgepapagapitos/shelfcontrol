@@ -52,112 +52,151 @@ function AddBookForm() {
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
   const [infoPage, setInfoPage] = useState('');
 
-  const handleModal = () => {
-    handleReset();
-    setOpen(!open);
-  }
+  // const handleModal = () => {
+  //   handleReset();
+  //   setOpen(!open);
+  // }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const bookToAdd = {
-      title,
-      author,
-      selectedGenre,
-      isbn,
-      description,
-      bookCoverImage,
-      readingGradeLevel,
-      infoPage
-    };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const bookToAdd = {
+  //     title,
+  //     author,
+  //     selectedGenre,
+  //     isbn,
+  //     description,
+  //     bookCoverImage,
+  //     readingGradeLevel,
+  //     infoPage
+  //   };
 
-    console.log('booktoAdd', bookToAdd);
+  //   console.log('booktoAdd', bookToAdd);
 
-    let doesBookExist = false;
+  //   let doesBookExist = false;
 
-    for(let book of books) {
-      if(book.isbn === isbn) {
-        doesBookExist = true;
-      }
-    }
+  //   for(let book of books) {
+  //     if(book.isbn === isbn) {
+  //       doesBookExist = true;
+  //     }
+  //   }
 
-    if(doesBookExist) {
-      dispatch({
-        type: 'INCREASE_QUANTITY',
-        payload: {isbn: isbn}
-      })
-    } else {
-        dispatch({
-          type: 'ADD_BOOK',
-          payload: bookToAdd
-        })
-    };
+  //   if(doesBookExist) {
+  //     dispatch({
+  //       type: 'INCREASE_QUANTITY',
+  //       payload: {isbn: isbn}
+  //     })
+  //   } else {
+  //       dispatch({
+  //         type: 'ADD_BOOK',
+  //         payload: bookToAdd
+  //       })
+  //   };
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Book added to inventory'
-    })
+  //   Swal.fire({
+  //     icon: 'success',
+  //     title: 'Book added to inventory'
+  //   })
 
-    handleReset();
-  }
+  //   handleReset();
+  // }
 
-  const handleReset = () => {
-    setTitle('');
-    setAuthor('');
-    setInfoPage('');
-    setDescription('');
-    setBookCoverImage('');
-    setSelectedGenre('');
-    setIsbn('');
-  }
+  // const handleReset = () => {
+  //   setTitle('');
+  //   setAuthor('');
+  //   setInfoPage('');
+  //   setDescription('');
+  //   setBookCoverImage('');
+  //   setSelectedGenre('');
+  //   setIsbn('');
+  // }
 
-  const handleScan = () => {
-    console.log('isbn', isbn);
-    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
-    axios.get(`${url}`)
-      .then((data) => {
-        axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
-          .then((image) => {
-            console.log('image', image.config.url)
-            const genreToAdd = data.data.items[0].volumeInfo.categories[0]
-            console.log('scanned genre', genreToAdd);
-            setTitle(data.data.items[0].volumeInfo.title);
-            setAuthor(data.data.items[0].volumeInfo.authors[0]);
-            setInfoPage(data.data.items[0].volumeInfo.previewLink);
-            setDescription(data.data.items[0].volumeInfo.description);
-            setBookCoverImage(image.config.url);
-            let doesGenreExist = false;
+  // const handleScan = () => {
+    // console.log('isbn', isbn);
+    // const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
+    // axios.get(`${url}`)
+    //   .then((data) => {
+    //     axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
+    //       .then((image) => {
+    //         console.log('image', image.config.url)
+    //         const genreToAdd = data.data.items[0].volumeInfo.categories[0]
+    //         console.log('scanned genre', genreToAdd);
+    //         setTitle(data.data.items[0].volumeInfo.title);
+    //         setAuthor(data.data.items[0].volumeInfo.authors[0]);
+    //         setInfoPage(data.data.items[0].volumeInfo.previewLink);
+    //         setDescription(data.data.items[0].volumeInfo.description);
+    //         setBookCoverImage(image.config.url);
+            
+    //         let doesGenreExist = false;
 
-            for(let genre of genres) {
-              if(genre.genre_name === genreToAdd) {
-                doesGenreExist = true;
-              }
-            }
-            if(doesGenreExist) {
-              setSelectedGenre(genre.id);
-            } 
-            else {
-              dispatch({
-              type: 'ADD_NEW_GENRE',
-              payload: {genreToAdd}
-            })
-            setSelectedGenre(genreToAdd);
-          }
-        })
-          .catch(error => {
-            console.log('error in get image', error)
-          })
-        })
-      .catch(err => {
-        console.log('error in api request', err);
-      });
-  }
+    //         for(let genre of genres) {
+    //           console.log('genre', genre)
+    //           if(genre.genre_name === genreToAdd) {
+    //             doesGenreExist = true;
+    //           }
+    //         }
+    //         if(doesGenreExist) {
+    //           setSelectedGenre(genre.id);
+    //         } 
+    //         else {
+    //           dispatch({
+    //           type: 'ADD_NEW_GENRE',
+    //           payload: {genreToAdd}
+    //         })
+    //         setSelectedGenre(genreToAdd);
+    //       }
+    //     })
+    //       .catch(error => {
+    //         console.log('error in get image', error)
+    //       })
+    //     })
+    //   .catch(err => {
+    //     console.log('error in api request', err);
+    //   });
+  // }
+
+  // const handleResult = (result) => {
+  //   setIsbn(result);
+  //   Swal.fire({
+  //     title: 'ISBN Found',
+  //     input: `${isbn}`,
+  //     inputAttributes: {
+  //       autocapitalize: 'off'
+  //     },
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Look up',
+  //     showLoaderOnConfirm: true,
+  //     preConfirm: (isbn) => {
+  //       return fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+  //         .then(response => {
+  //           if (!response.ok) {
+  //             throw new Error(response.statusText)
+  //           }
+  //           return response.json()
+  //         })
+  //         .catch(error => {
+  //           Swal.showValidationMessage(
+  //             `Request failed: ${error}`
+  //           )
+  //         })
+  //     },
+  //     allowOutsideClick: () => !Swal.isLoading()
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       setTitle(result.data.items[0].volumeInfo.title);
+  //       setAuthor(result.data.items[0].volumeInfo.authors[0]);
+  //       setInfoPage(result.data.items[0].volumeInfo.previewLink);
+  //       setDescription(result.data.items[0].volumeInfo.description);
+  //       Swal.fire({
+  //         title: `${title}`,
+  //       })
+  //     }
+  //   })
+  // }
 
   return (
     <div className="container">
-    <Button variant="contained" color="primary" onClick={handleModal}>
-      Add A Book
-    </Button>
-    <Modal
+
+    {/* <Modal
       className={classes.modal} 
       aria-labelledby="add-book"
       aria-describedby="add-book"
@@ -181,7 +220,7 @@ function AddBookForm() {
         <Button color="secondary" onClick={handleModal}>Cancel</Button>
       </Paper>  
     </Modal>
-      {/* <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           placeholder="Title"
           value={title}
@@ -261,29 +300,34 @@ function AddBookForm() {
             </Button>
             <div className="header">Scan the book's barcode</div>
             <div className="scanner">
+            <Paper>
               <BarcodeScannerComponent
-                width={500}
+                width="100%"
                 height={250}
-                onUpdate={(err, result) => {
-                  if(result) {
-                    setIsbn(result.text);
+                onUpdate={(err, results) => {
+                  if(results) {
+                    console.log('result', results)
+                    setIsbn(results.text);
                     handleScan();
+                    close();
                   }
-                  
                 }}
               />
+            </Paper>
               {(title && author) && <p>{title} by {author}</p>}
               <TextField placeholder="Enter ISBN" value={isbn} onChange={(event) => setIsbn(event.target.value)}></TextField>
             </div>
             <div className="actions">
               <Button onClick={() => {
-                handleScan();
+                console.log('confirmed');
+                handleReset();
                 close();
               }}>
                 Confirm
               </Button>
               <Button
                 onClick={() => {
+                  console.log('cancelled');
                   handleReset();
                   close();
                 }}>

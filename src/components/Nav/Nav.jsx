@@ -8,8 +8,9 @@ import Badge from '@material-ui/core/Badge';
 import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import HomeIcon from '@material-ui/icons/Home';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -45,7 +46,7 @@ function Nav() {
 
   if (user.id != null) {
     loginLinkData.path = '/user';
-    loginLinkData.text = <AccountCircleOutlinedIcon style={{fill: "white"}}/>;
+    loginLinkData.text = <AccountCircleIcon style={{fill: "white"}}/>;
   }
 
   return (
@@ -62,6 +63,13 @@ function Nav() {
               <IconButton edge="end" className={classes.menuButton} aria-label="home">
                 <Link to="/books">
                   <HomeIcon style={{fill: "white"}}/>
+                </Link>
+              </IconButton>
+            )}
+            {user.auth_level === 'ADMIN' && (
+              <IconButton edge="end" className={classes.menuButton} color="inherit" aria-label="add">
+                <Link to="/add">
+                  <LibraryAddIcon style={{fill: "white"}}/>
                 </Link>
               </IconButton>
             )}

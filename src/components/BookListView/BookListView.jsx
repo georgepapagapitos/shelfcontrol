@@ -5,6 +5,7 @@ import AddShoppingCartOutlinedIcon from '@material-ui/icons/AddShoppingCartOutli
 import AddBook from '../AddBook/AddBook';
 import Swal from 'sweetalert2';
 import InfoIcon from '@material-ui/icons/Info';
+import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete';
 import Popup from 'reactjs-popup';
 import './BookListView.css';
@@ -13,6 +14,7 @@ import { fade } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
+import { useHistory } from 'react-router';
 
 
 const useStyles = makeStyles(theme => ({
@@ -78,12 +80,18 @@ function BookListView() {
   }, [])
   
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
-  const [filter, setFilter] = useState('');
-  const [expanded, setExpanded] = useState(false);
   const books = useSelector(store => store.books);
   const user = useSelector(store => store.user);
   const cart = useSelector(store => store.cart);
+  const [filter, setFilter] = useState('');
+  const [expanded, setExpanded] = useState(false);
+
+
+  const handleAddBook = () => {
+    history.push('/add');
+  }
 
   const handleAddToCart = (book) => {
     if(cart.length) {
@@ -183,9 +191,9 @@ function BookListView() {
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing>
-                    {user.auth_level === 'ADMIN' && <Button color="primary" variant="outlined">Edit Book</Button>}
+                    {user.auth_level === 'ADMIN' && <IconButton color="primary" variant="outlined"><EditIcon /></IconButton>}
                     {user.auth_level === 'USER' && <Button color="primary" variant="contained" onClick={() => handleAddToCart(book)}>Add To Cart</Button>}
-                    {(user.auth_level === 'ADMIN') && <Button color="secondary" variant="outlined" onClick={() => handleDelete(book.id)}>Delete Book</Button>}
+                    {(user.auth_level === 'ADMIN') && <IconButton color="secondary" variant="outlined" onClick={() => handleDelete(book.id)}><DeleteIcon /></IconButton>}
                     <IconButton
                       className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,

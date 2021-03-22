@@ -23,6 +23,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import './App.css';
 import BookListView from '../BookListView/BookListView';
 import CartView from '../CartView/CartView';
+import AddBookForm from '../AddBookForm/AddBookForm';
 
 function App() {
   const dispatch = useDispatch();
@@ -112,6 +113,10 @@ function App() {
 
           <ProtectedRoute exact path='/books'>
               <BookListView />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/add">
+            <AddBookForm />
           </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
