@@ -19,6 +19,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  console.log('req.body', req.body)
   const bookTitle = req.body.title;
   const bookAuthor = req.body.author;
   const genreId = req.body.selectedGenre;

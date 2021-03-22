@@ -27,12 +27,6 @@ function AddBookForm() {
     dispatch({
       type: 'FETCH_GENRES'
     });
-    dispatch({
-      type: 'FETCH_READING_GRADE_LEVELS'
-    });
-    dispatch({
-      type: 'FETCH_BOOKS'
-    })
   }, []);
 
   const dispatch = useDispatch();
@@ -61,7 +55,7 @@ function AddBookForm() {
         return <Scanner isbn={isbn} setIsbn={setIsbn}/>;
       case 1:
         return <AddBookInfo title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} isbn={isbn} setIsbn={setIsbn} description={description} setDescription={setDescription} bookCoverImage={bookCoverImage} setBookCoverImage={setBookCoverImage}
-          readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage}
+          readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage}
         />
       default:
         return 'Unknown Step'

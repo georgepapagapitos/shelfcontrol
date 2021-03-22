@@ -65,8 +65,6 @@ const useStyles = makeStyles(theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  title: {
-  }
 }))
 
 function BookListView() {
@@ -87,6 +85,7 @@ function BookListView() {
   const cart = useSelector(store => store.cart);
   const [filter, setFilter] = useState('');
   const [expanded, setExpanded] = useState(false);
+  const [expandedId, setExpandedId] = useState(-1);
 
 
   const handleAddBook = () => {
@@ -151,8 +150,8 @@ function BookListView() {
     console.log('details', book);
   }
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleExpandClick = (i) => {
+    setExpandedId(expandedId === i ? -1 : i);
   }
 
   return (
@@ -170,7 +169,7 @@ function BookListView() {
 
       {user.auth_level === 'ADMIN' && <AddBook />}
       <Grid container spacing={4} className={classes.gridContainer} justify="center">
-        {books.map((book) => {
+        {books.map((book, i) => {
           if(book.quantity > 0 && book.title.toLowerCase().includes(filter.toLowerCase())) {
             return (
               <Grid key={book.id} item xs={12} sm={6} md={4}>
@@ -198,15 +197,14 @@ function BookListView() {
                       className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
                       })}
-                      onClick={handleExpandClick}
-                      aria-expanded={expanded}
+                      onClick={() => handleExpandClick(i)}
+                      aria-expanded={expandedId === i}
                       aria-label="show more">
                       <ExpandMoreIcon />
                     </IconButton>
                   </CardActions>
-                  <Collapse in={expanded} time="auto" unmountOnExit>
+                  <Collapse in={expandedId === i} time="auto" unmountOnExit>
                     <CardContent>
-                    <Typography paragraph>Description:</Typography>
                       <Typography paragraph>
                         {book.description}
                       </Typography>
