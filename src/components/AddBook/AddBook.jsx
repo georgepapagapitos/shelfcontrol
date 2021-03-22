@@ -4,12 +4,32 @@ import axios from 'axios';
 import Popup from 'reactjs-popup';
 import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
 import Swal from 'sweetalert2';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Modal, makeStyles, Paper, Typography, Divider } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
+const useStyles = makeStyles(theme => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: "center",
+  },
+  paper: {
+    position: 'absolute',
+    width: 450,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}))
 
 function AddBookForm() {
+
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const genres = useSelector((store) => store.genres);
+  const readingGradeLevels = useSelector((store) => store.readingGradeLevels);
+  const books = useSelector((store => store.books));
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     dispatch({
@@ -23,10 +43,6 @@ function AddBookForm() {
     })
   }, []);
 
-  const genres = useSelector((store) => store.genres);
-  const readingGradeLevels = useSelector((store) => store.readingGradeLevels);
-  const books = useSelector((store => store.books));
-
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -35,6 +51,10 @@ function AddBookForm() {
   const [bookCoverImage, setBookCoverImage] = useState('');
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
   const [infoPage, setInfoPage] = useState('');
+
+  const handleModal = () => {
+    setOpen(!open);
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -129,11 +149,98 @@ function AddBookForm() {
       .catch(err => {
         console.log('error in api request', err);
       });
-  };
+  }
+
+  const handleConfirm = () => {
+    handleModal();
+    Swal.queue([{
+      title: `ISBN: ${isbn}`,
+      confirmButtonText: 'Search for book',
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+          .then((data) => {
+            console.log('data', data)
+            axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
+              .then((image) => {
+                console.log('image', image.config.url)
+                const genreToAdd = data.data.items[0].volumeInfo.categories[0]
+                console.log('scanned genre', genreToAdd);
+                setTitle(data.data.items[0].volumeInfo.title);
+                setAuthor(data.data.items[0].volumeInfo.authors[0]);
+                setInfoPage(data.data.items[0].volumeInfo.previewLink);
+                setDescription(data.data.items[0].volumeInfo.description);
+                setBookCoverImage(image.config.url);
+                let doesGenreExist = false;
+    
+                for(let genre of genres) {
+                  if(genre.genre_name === genreToAdd) {
+                    doesGenreExist = true;
+                  }
+                }
+                if(doesGenreExist) {
+                  setSelectedGenre(genre.id);
+                } 
+                else {
+                  dispatch({
+                  type: 'ADD_NEW_GENRE',
+                  payload: {genreToAdd}
+                })
+                setSelectedGenre(genreToAdd);
+              }
+            })
+              .catch(err => {
+                
+              })
+          })
+          .then(() => Swal.fire({
+            title: 'Results',
+            text: {title},
+            imageUrl: {bookCoverImage},
+            imageWidth: 400,
+            imageHeight: 200
+          }))
+          .catch(() => {
+            Swal.insertQueueStep({
+              icon: 'error',
+              title: 'Unable to get your public IP'
+            })
+          })
+      }
+    }])
+  }
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
+    <Button variant="contained" color="primary" onClick={handleModal}>
+      Add A Book
+    </Button>
+    <Modal
+      className={classes.modal} 
+      aria-labelledby="add-book"
+      aria-describedby="add-book"
+      open={open}
+      onClose={handleModal}>
+      <Paper>
+        <Typography align="center" variant="h4">Scan ISBN</Typography>
+        <Divider />
+        <BarcodeScannerComponent
+          width={500}
+          height={250}
+          onUpdate={(err, result) => {
+            if(result) {
+              console.log('result', result.text)
+              handleScan();
+              setIsbn(result.text);
+            }
+          }}
+        />
+        <Typography align="center">Results: {isbn}</Typography>
+        <Button color="primary" onClick={handleConfirm}>Confirm</Button>
+        <Button color="secondary" onClick={handleModal}>Cancel</Button>
+      </Paper>  
+    </Modal>
+      {/* <form onSubmit={handleSubmit}>
         <input
           placeholder="Title"
           value={title}
@@ -217,15 +324,15 @@ function AddBookForm() {
                 width={500}
                 height={250}
                 onUpdate={(err, result) => {
-                  if (result) {
+                  if(result) {
                     setIsbn(result.text);
                     handleScan();
                   }
+                  
                 }}
               />
               {(title && author) && <p>{title} by {author}</p>}
               <TextField placeholder="Enter ISBN" value={isbn} onChange={(event) => setIsbn(event.target.value)}></TextField>
-              <img src={bookCoverImage} />
             </div>
             <div className="actions">
               <Button onClick={() => {
@@ -244,7 +351,7 @@ function AddBookForm() {
             </div>
           </div>
         )}
-      </Popup>
+      </Popup> */}
     </div>
   );
 }
