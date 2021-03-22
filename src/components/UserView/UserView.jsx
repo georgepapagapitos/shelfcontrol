@@ -1,12 +1,19 @@
-import { Typography } from "@material-ui/core";
+import { Divider, Typography, makeStyles, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@material-ui/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650
+  }
+})
 
 function UserView() {
 
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const orders = useSelector((store) => store.orders);
   const user = useSelector((store) => store.user);
-
 
   useEffect(() => {
     dispatch({
@@ -15,10 +22,8 @@ function UserView() {
     dispatch({
       type: 'FETCH_ACTIVE_CART'
     });
-  }, [])
+  }, []);
 
-  const orders = useSelector((store) => store.orders);
-  console.log('orders', orders)
   const handleFinished = () => {
     console.log('finished');
   }
@@ -31,14 +36,42 @@ function UserView() {
       <Typography variant="subtitle1" align="left" component="div">
         Your ID is: {user.id}
       </Typography>
-      <Typography variant="subtitle1" align="left" component="div">
+      <Typography gutterBottom variant="subtitle1" align="left" component="div">
         Your username is: {user.username}
       </Typography>
       <Divider/>
-      <Typography variant="h1" component="div" align="left">
+      <Typography variant="h2" component="div" align="center">
         Book History
       </Typography>
-      <table>
+      <TableContainer component={Paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Book Title</TableCell>
+              <TableCell align="right">Order Date</TableCell>
+              <TableCell align="right">Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orders.map((order, i) => (
+              <TableRow key={i}>
+                <TableCell component="th" scope="row">
+                  {order.title}
+                </TableCell>
+                <TableCell align="right">
+                  {order.order_date}
+                </TableCell>
+                <TableCell align="right">
+                  {(order.is_fulfilled && order.date_completed === null) ? <Button align="right" variant="contained" color="primary" type="button" onClick={handleFinished}>Finished</Button> : 
+                  (order.is_fulfilled && order.date_completed) ? 'Book Finished!' : 'On the way!'}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* <table>
         <thead>
         <tr>
           <th>Book Title</th>
@@ -54,13 +87,14 @@ function UserView() {
               <td>{order.title}</td>
               <td>{order.order_date}</td>
               {(order.is_fulfilled && order.date_completed === null) ? <td><button type="button" onClick={handleFinished}>Finished</button></td> : 
-              (order.is_fulfilled && order.date_completed) ? <td>Book Finished!</td> : <td>On the way!</td>}
+                (order.is_fulfilled && order.date_completed) ? <td>Book Finished!</td> : <td>On the way!</td>}
             </tr>
           )
           }
         })}
         </tbody>
-      </table>
+      </table> */}
+
     </div>
   )
 }

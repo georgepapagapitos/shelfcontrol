@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { Button } from '@material-ui/core';
+import { Button, makeStyles, Typography } from '@material-ui/core';
 import './AdminView.css';
 
 function AdminView() {
@@ -24,7 +24,7 @@ function AdminView() {
 
   return (
     <div className="container">
-      <h1>ADMIN PAGE</h1>
+      <Typography variant="h2" align="center">Admin Page</Typography>
       <div className="orders-container">
         {orders.map((order, i) => {
           return (

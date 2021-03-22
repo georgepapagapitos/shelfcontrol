@@ -37,7 +37,7 @@ function AddBookForm() {
   const [infoPage, setInfoPage] = useState('');
 
   const handleSubmit = (event) => {
-
+    event.preventDefault();
     const bookToAdd = {
       title,
       author,
@@ -48,7 +48,7 @@ function AddBookForm() {
       readingGradeLevel,
       infoPage
     };
-    
+
     console.log('booktoAdd', bookToAdd);
 
     let doesBookExist = false;
@@ -92,44 +92,117 @@ function AddBookForm() {
   const handleScan = () => {
     console.log('isbn', isbn);
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
-    axios
-      .get(
-        `${url}`
-      )
+    axios.get(`${url}`)
       .then((data) => {
-        const genreToAdd = data.data.items[0].volumeInfo.categories[0]
-        console.log('scanned genre', genreToAdd);
-        setTitle(data.data.items[0].volumeInfo.title);
-        setAuthor(data.data.items[0].volumeInfo.authors[0]);
-        setInfoPage(data.data.items[0].volumeInfo.previewLink);
-        setDescription(data.data.items[0].volumeInfo.description);
-        setBookCoverImage(data.data.items[0].volumeInfo.imageLinks.thumbnail);
+        axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
+          .then((image) => {
+            console.log('image', image.config.url)
+            const genreToAdd = data.data.items[0].volumeInfo.categories[0]
+            console.log('scanned genre', genreToAdd);
+            setTitle(data.data.items[0].volumeInfo.title);
+            setAuthor(data.data.items[0].volumeInfo.authors[0]);
+            setInfoPage(data.data.items[0].volumeInfo.previewLink);
+            setDescription(data.data.items[0].volumeInfo.description);
+            setBookCoverImage(image.config.url);
+            let doesGenreExist = false;
 
-        let doesGenreExist = false;
-
-        for(let genre of genres) {
-          if(genre.genre_name === genreToAdd) {
-            doesGenreExist = true;
-          }
-        }
-        if(doesGenreExist) {
-            setSelectedGenre(genreToAdd);
-          } else {
-            dispatch({
+            for(let genre of genres) {
+              if(genre.genre_name === genreToAdd) {
+                doesGenreExist = true;
+              }
+            }
+            if(doesGenreExist) {
+              setSelectedGenre(genre.id);
+            } 
+            else {
+              dispatch({
               type: 'ADD_NEW_GENRE',
               payload: {genreToAdd}
             })
             setSelectedGenre(genreToAdd);
           }
-          
-      })
+        })
+          .catch(error => {
+            console.log('error in get image', error)
+          })
+        })
       .catch(err => {
-        console.log('error', err);
+        console.log('error in api request', err);
       });
   };
 
   return (
     <div className="container">
+      <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+        <input
+          placeholder="Author"
+          value={author}
+          onChange={(event) => setAuthor(event.target.value)}
+        />
+        <label htmlFor="genres">
+          <select
+            name="genres"
+            onChange={(event) => setSelectedGenre(event.target.value)}
+          >
+            <option disabled>Choose a genre</option>
+            {genres.map((genre) => {
+              return (
+                <option key={genre.id} value={genre.id}>
+                  {genre.genre_name}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+        <label htmlFor="readingLevels">
+          <select
+            name="readingLevels"
+            onChange={(event) => setReadingGradeLevel(event.target.value)}
+          >
+            <option disabled>Choose a reading grade level</option>
+            {readingGradeLevels.map((gradeLevel) => {
+              return (
+                <option key={gradeLevel.id} value={gradeLevel.id}>
+                  {gradeLevel.reading_grade_level}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+        <label htmlFor="isbn">
+          <input
+            placeholder="ISBN"
+            value={isbn}
+            onChange={(event) => setIsbn(event.target.value)}
+          />
+        </label>
+        <label htmlFor="description">
+          Description:
+          <textarea
+            name="description"
+            placeholder="Enter a brief description here..."
+            value={description}
+            onChange={event => setDescription(event.target.value)}
+            rows="4"
+            cols="50"
+          ></textarea>
+        </label>
+        <input
+          placeholder="Book Cover Image URL"
+          value={bookCoverImage}
+          onChange={(event) => setBookCoverImage(event.target.value)}
+        />
+        <img src={bookCoverImage} alt={title} />
+        <div>
+          <button>Submit</button>
+          <button type="button" onClick={handleReset}>Reset</button>
+        </div>
+      </form>
       <Popup
         trigger={<Button component="div" variant="contained" color="primary">Add A Book</Button>}
         modal>
@@ -155,21 +228,17 @@ function AddBookForm() {
               <img src={bookCoverImage} />
             </div>
             <div className="actions">
-              <Button
-                onClick={() => {
-                  handleScan();
-                  handleSubmit();
-                  close();
-                }}
-              >
+              <Button onClick={() => {
+                handleScan();
+                close();
+              }}>
                 Confirm
               </Button>
               <Button
                 onClick={() => {
                   handleReset();
                   close();
-                }}
-              >
+                }}>
                 Close
               </Button>
             </div>
@@ -181,74 +250,3 @@ function AddBookForm() {
 }
 
 export default AddBookForm;
-
-    //   <form onSubmit={handleSubmit}>
-    //     <input
-    //       placeholder="Title"
-    //       value={title}
-    //       onChange={(event) => setTitle(event.target.value)}
-    //     />
-    //     <input
-    //       placeholder="Author"
-    //       value={author}
-    //       onChange={(event) => setAuthor(event.target.value)}
-    //     />
-    //     <label htmlFor="genres">
-    //       <select
-    //         name="genres"
-    //         onChange={(event) => setSelectedGenre(event.target.value)}
-    //       >
-    //         <option disabled>Choose a genre</option>
-    //         {genres.map((genre) => {
-    //           return (
-    //             <option key={genre.id} value={genre.id}>
-    //               {genre.genre_name}
-    //             </option>
-    //           );
-    //         })}
-    //       </select>
-    //     </label>
-    //     <label htmlFor="readingLevels">
-    //       <select
-    //         name="readingLevels"
-    //         onChange={(event) => setReadingGradeLevel(event.target.value)}
-    //       >
-    //         <option disabled>Choose a reading grade level</option>
-    //         {readingGradeLevels.map((gradeLevel) => {
-    //           return (
-    //             <option key={gradeLevel.id} value={gradeLevel.id}>
-    //               {gradeLevel.reading_grade_level}
-    //             </option>
-    //           );
-    //         })}
-    //       </select>
-    //     </label>
-    //     <label htmlFor="isbn">
-    //       <input
-    //         placeholder="ISBN"
-    //         value={isbn}
-    //         onChange={(event) => setIsbn(event.target.value)}
-    //       />
-    //     </label>
-    //     <label htmlFor="description">
-    //       Description:
-    //       <textarea
-    //         name="description"
-    //         placeholder="Enter a brief description here..."
-    //         value={description}
-    //         onChange={event => setDescription(event.target.value)}
-    //         rows="4"
-    //         cols="50"
-    //       ></textarea>
-    //     </label>
-    //     <input
-    //       placeholder="Book Cover Image URL"
-    //       value={bookCoverImage}
-    //       onChange={(event) => setBookCoverImage(event.target.value)}
-    //     />
-    //     <img src={bookCoverImage} alt={title} />
-    //     <div>
-    //       <button>Submit</button>
-    //       <button type="button" onClick={handleReset}>Reset</button>
-    //     </div>
-    //   </form>
