@@ -9,6 +9,7 @@ import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1
   },
+  offset: theme.mixins.toolbar,
 }));
 
 function Nav() {
@@ -48,11 +50,14 @@ function Nav() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar>
         <Toolbar>
-          <Typography className={classes.title} variant="h3" noWrap>
+          {/* <Typography className={classes.title} variant="h3" noWrap>
             Shelf Control
-          </Typography>
+          </Typography> */}
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
           {user.id && (
               <IconButton edge="end" className={classes.menuButton} aria-label="home">
                 <Link to="/books">
@@ -80,6 +85,7 @@ function Nav() {
             </IconButton>}
         </Toolbar>
       </AppBar>
+      <div className={classes.offset} />
     </div>
   )
 }

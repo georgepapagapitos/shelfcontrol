@@ -37,8 +37,8 @@ function CartView() {
       title: 'Are you ready to checkout?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#3f51b5',
+      cancelButtonColor: '#f50057',
       confirmButtonText: 'Yes, checkout!'
     }).then((result) => {
       if (result.isConfirmed) {

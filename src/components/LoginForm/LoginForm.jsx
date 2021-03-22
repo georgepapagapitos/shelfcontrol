@@ -13,6 +13,9 @@ function LoginForm() {
 
     if (username && password) {
       dispatch({
+        type: 'FETCH_ALL_ORDERS'
+      });
+      dispatch({
         type: 'LOGIN',
         payload: {
           username: username,

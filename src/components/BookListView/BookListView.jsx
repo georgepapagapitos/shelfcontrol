@@ -46,6 +46,12 @@ const useStyles = makeStyles(theme => ({
   searchInput: {
     width: '200px',
     margin: "5px",
+    opacity: '0.6',
+    padding: `0px ${theme.spacing(1)}px`,
+    fontSize: '0.8rem',
+    '&:hover': {
+      backgroundColor: '#f2f2f2'
+    },
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -57,10 +63,11 @@ const useStyles = makeStyles(theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  title: {
+  }
 }))
 
 function BookListView() {
-
   useEffect(() => {
     dispatch({
       type: 'FETCH_BOOKS'
@@ -114,8 +121,8 @@ function BookListView() {
       title: 'Are you sure?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#3f51b5',
+      cancelButtonColor: '#f50057',
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -142,7 +149,7 @@ function BookListView() {
 
   return (
     <div className='container'>
-      <Typography gutterBottom variant="h2" component="div" align="center">
+      <Typography className={classes.title} gutterBottom variant="h3" component="div" align="center">
         Available Books
       </Typography>
 

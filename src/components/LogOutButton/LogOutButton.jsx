@@ -13,8 +13,8 @@ function LogOutButton(props) {
     Swal.fire({
       title: 'Are you ready to logout?',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#3f51b5',
+      cancelButtonColor: '#f50057',
       confirmButtonText: 'Logout'
     }).then((result) => {
       if(result.isConfirmed) {
