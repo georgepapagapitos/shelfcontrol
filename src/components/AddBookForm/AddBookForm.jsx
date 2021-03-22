@@ -1,4 +1,4 @@
-import { Button, Typography, StepLabel, Step, Stepper, TextField } from "@material-ui/core";
+import { Button, Typography, StepLabel, Step, Stepper, TextField, Paper, Card } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Scanner from "../Scanner/Scanner";
@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddBookInfo from '../AddBookInfo/AddBookInfo';
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +28,9 @@ function AddBookForm() {
     dispatch({
       type: 'FETCH_GENRES'
     });
+    dispatch({
+      type: 'FETCH_BOOKS'
+    });
   }, []);
 
   const dispatch = useDispatch();
@@ -41,30 +45,23 @@ function AddBookForm() {
   const [bookCoverImage, setBookCoverImage] = useState('');
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
   const [infoPage, setInfoPage] = useState('');
-  const steps = ['Scan ISBN', 'Verify book information'];
   const genres = useSelector(store => store.genres);
+  const books = useSelector(store => store.books);
 
-  const checkGenre = () => {
-
-  }
-
+  const steps = ['Scan ISBN', 'Verify book information'];
 
   const getStepContent = (step) => {
     switch(step) {
       case 0:
         return <Scanner isbn={isbn} setIsbn={setIsbn}/>;
       case 1:
-        return <AddBookInfo title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} isbn={isbn} setIsbn={setIsbn} description={description} setDescription={setDescription} bookCoverImage={bookCoverImage} setBookCoverImage={setBookCoverImage}
-          readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage}
-        />
-      default:
-        return 'Unknown Step'
+        return <AddBookInfo bookCoverImage={bookCoverImage} readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage}/>
     }
   }
 
   const handleNext = () => {
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep(1);
 
     console.log('isbn', isbn);
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
@@ -112,11 +109,61 @@ function AddBookForm() {
   }
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setActiveStep(0);
   }
 
   const handleReset = () => {
-    setActiveStep(0);
+    setTitle('');
+    setAuthor('');
+    setInfoPage('');
+    setDescription('');
+    setBookCoverImage('');
+    setSelectedGenre('');
+    setReadingGradeLevel('');
+    setIsbn('');
+    }
+
+
+  const handleConfirm = (event) => {
+
+    event.preventDefault();
+
+    const bookToAdd = {
+      title,
+      author,
+      selectedGenre,
+      description,
+      bookCoverImage,
+      readingGradeLevel,
+      infoPage,
+    };
+
+    console.log('booktoAdd', bookToAdd);
+
+    let doesBookExist = false;
+
+    for(let book of books) {
+      if(book.isbn === isbn) {
+        doesBookExist = true;
+      }
+    }
+    if(doesBookExist) {
+      dispatch({
+        type: 'INCREASE_QUANTITY',
+        payload: {isbn: isbn}
+      })
+    } else {
+        dispatch({
+          type: 'ADD_BOOK',
+          payload: bookToAdd
+        })
+    };
+    Swal.fire({
+      icon: 'success',
+      title: 'Book added to inventory'
+    })
+    handleReset();
+    history.push('/books');
   }
  
   return(
@@ -133,14 +180,15 @@ function AddBookForm() {
         })}
       </Stepper>
     
-      {activeStep === steps.length ? (
+      {activeStep === 1 ? (
         <div>
-          <Typography className={classes.instructions}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Button onClick={handleReset} className={classes.button}>
-            Reset
+        <Card>
+          <AddBookInfo readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage} bookCoverImage={bookCoverImage} title={title} author={author} selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre}/>
+        </Card>
+          <Button onClick={handleBack} className={classes.button}>
+            Back
           </Button>
+          <Button onClick={handleConfirm} variant="contained" color="primary">Confirm</Button>
         </div>
       ) : (
         <div>
@@ -161,7 +209,7 @@ function AddBookForm() {
               onClick={handleNext}
               className={classes.button}
             >
-              {activeStep === steps.length ? 'Finish' : 'Next'}
+            {activeStep === steps.length ? 'Finish' : 'Next'}
             </Button>
           </div>
         </div>

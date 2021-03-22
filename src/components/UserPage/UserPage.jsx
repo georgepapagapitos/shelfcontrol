@@ -20,7 +20,6 @@ function UserPage() {
     <div className="container">
       {user.auth_level === 'ADMIN' && <AdminView />}
       {user.auth_level === 'USER' && <UserView />}
-      <LogOutButton className="btn" />
     </div>
   );
 }

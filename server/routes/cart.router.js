@@ -5,9 +5,9 @@ const pool = require('../modules/pool');
 router.get('/', (req, res) => {
   const userId = req.user.id;
   const query = `SELECT "books".id, "books".title, "books".isbn, "books".author, "orders_books".order_id, "orders".user_id 
-                  FROM "books" 
-                  JOIN "orders_books" ON "books".id="orders_books".book_id 
-                  JOIN "orders" ON "orders".id="orders_books".order_id 
+                  FROM "books"
+                  JOIN "orders_books" ON "books".id="orders_books".book_id
+                  JOIN "orders" ON "orders".id="orders_books".order_id
                   WHERE "orders".user_id=$1 
                   AND "orders".is_active=true;`;
   pool.query(query, [userId])

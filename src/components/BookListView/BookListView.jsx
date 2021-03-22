@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Typography, IconButton, makeStyles, Button, Divider, CardMedia, Card, CardActionArea, CardContent, CardActions, Grid, TextField, CardHeader, Collapse } from "@material-ui/core";
+import { Typography, IconButton, makeStyles, Button, Divider, CardMedia, Card, CardActionArea, CardContent, CardActions, Grid, TextField, CardHeader, Collapse, Box } from "@material-ui/core";
 import AddShoppingCartOutlinedIcon from '@material-ui/icons/AddShoppingCartOutlined';
 import AddBook from '../AddBook/AddBook';
 import Swal from 'sweetalert2';
@@ -87,11 +87,6 @@ function BookListView() {
   const [expanded, setExpanded] = useState(false);
   const [expandedId, setExpandedId] = useState(-1);
 
-
-  const handleAddBook = () => {
-    history.push('/add');
-  }
-
   const handleAddToCart = (book) => {
     if(cart.length) {
       console.log('active order');
@@ -159,19 +154,16 @@ function BookListView() {
       <Typography className={classes.title} gutterBottom variant="h3" component="div" align="center">
         Available Books
       </Typography>
-
       <div className={classes.searchContainer}>
             <SearchIcon className={classes.searchIcon} />
             <TextField className={classes.searchInput} onChange={(event) => {setFilter(event.target.value)}} label="Search Books" variant="standard" />
       </div>
-
       <Divider className={classes.divider}/>
-
-      {user.auth_level === 'ADMIN' && <AddBook />}
       <Grid container spacing={4} className={classes.gridContainer} justify="center">
         {books.map((book, i) => {
           if(book.quantity > 0 && book.title.toLowerCase().includes(filter.toLowerCase())) {
             return (
+
               <Grid key={book.id} item xs={12} sm={6} md={4}>
                 <Card className={classes.root}>
                   <CardHeader
@@ -206,46 +198,15 @@ function BookListView() {
                   <Collapse in={expandedId === i} time="auto" unmountOnExit>
                     <CardContent>
                       <Typography paragraph>
-                        {book.description}
+                        <Box fontStyle="italic">
+                          {book.description}              
+                        </Box>
                       </Typography>
                     </CardContent>
                   </Collapse>
                 </Card>
               </Grid>
-
-
-            /* <div key={book.id} className="card">
-              <Typography align="center" variant="h6">
-                {book.title}
-              </Typography>
-              <Typography align="center" variant="subtitle2">
-                by {book.author}
-              </Typography>
-              <Divider/>
-              <img className="book-cover" src={book.book_cover_image} alt={book.title} />
-              <Typography align="center">Recommended Reading Level: {book.reading_grade_level}</Typography>
-              <Divider/>
-              <Popup trigger={
-              <IconButton type="button" aria-label="info">
-                <InfoIcon color="primary"/>
-              </IconButton>} modal>
-              <div className="popup-content">
-                <h3>{book.title} by {book.author}</h3>
-                <h4>Genre: {book.genre_name}</h4>
-                <Divider/>
-                <h3>Description:</h3>
-                <div>
-                  <Typography>{book.description}</Typography>
-                </div>
-                <h3>{book.reading_grade_level} Reading Level</h3>
-                {user.auth_level === 'ADMIN' && <Button color="primary" variant="outlined">Edit Book</Button>}
-                {user.auth_level === 'USER' && <Button color="primary" variant="contained" onClick={() => handleAddToCart(book)}>Add To Cart</Button>}
-              </div>
-              </Popup>
-              {(user.auth_level === 'ADMIN') && <IconButton onClick={() => handleDelete(book.id)}><DeleteIcon color="secondary"/></IconButton>}
-              {(user.auth_level === 'USER') && <IconButton className="add-btn" size="medium" onClick={() => handleAddToCart(book)}><AddShoppingCartOutlinedIcon color="primary" /></IconButton>}
-            </div> */
-
+              
           )
           }
         })}

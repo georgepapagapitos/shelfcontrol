@@ -16,6 +16,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const genreToAdd = req.body.genreToAdd;
+  console.log("genreToAdd", genreToAdd);
   const query = `INSERT INTO "genres" ("genre_name") VALUES ($1) RETURNING "id";`;
   pool.query(query, [genreToAdd])
     .then(result => {

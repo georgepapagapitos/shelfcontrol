@@ -3,10 +3,23 @@ import { useDispatch, useSelector } from "react-redux"
 import moment from 'moment';
 import { useHistory } from "react-router";
 import Swal from 'sweetalert2';
+import { Button, Divider, IconButton, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+  button: {
+    marginTop: 10
+  }
+})
 
 function CartView() {
 
   const cart = useSelector((store) => store.cart);
+
+  const classes = useStyles();
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -61,19 +74,38 @@ function CartView() {
 
   return (
     <div className="container">
-      <h2>Current Cart:</h2>
-      <div>
-        <ul>
-          {cart.map(book => {
-            return (
-              <li key={book.id}>
-                {book.title} by {book.author}
-                <button type="button" onClick={() => handleRemove(book)}>Remove</button>
-              </li>
-            )
-          })}
-        </ul>
-        <button type="button" onClick={() => handleCheckout(cart)}>Checkout</button>
+      <Typography gutterBottom variant="h3">Current Cart</Typography>
+      <Divider />
+    <div>
+    <TableContainer component={Paper}>
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Title</TableCell>
+            <TableCell>Author</TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {cart.map((book, i) => {
+              return (
+                <TableRow key={i}>
+                  <TableCell component="th" scope="row">
+                    {book.title}
+                  </TableCell>
+                  <TableCell align="left">
+                    {book.author}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton color="secondary"  onClick={() => handleRemove(book)}><DeleteIcon /></IconButton>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    <Button className={classes.button} type="button" variant="outlined" color="primary" onClick={() => handleCheckout(cart)}>Checkout</Button>
       </div>
     </div>
   )
