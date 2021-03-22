@@ -53,6 +53,7 @@ function AddBookForm() {
   const [infoPage, setInfoPage] = useState('');
 
   const handleModal = () => {
+    handleReset();
     setOpen(!open);
   }
 
@@ -151,65 +152,6 @@ function AddBookForm() {
       });
   }
 
-  const handleConfirm = () => {
-    handleModal();
-    Swal.queue([{
-      title: `ISBN: ${isbn}`,
-      confirmButtonText: 'Search for book',
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        return axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
-          .then((data) => {
-            console.log('data', data)
-            axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
-              .then((image) => {
-                console.log('image', image.config.url)
-                const genreToAdd = data.data.items[0].volumeInfo.categories[0]
-                console.log('scanned genre', genreToAdd);
-                setTitle(data.data.items[0].volumeInfo.title);
-                setAuthor(data.data.items[0].volumeInfo.authors[0]);
-                setInfoPage(data.data.items[0].volumeInfo.previewLink);
-                setDescription(data.data.items[0].volumeInfo.description);
-                setBookCoverImage(image.config.url);
-                let doesGenreExist = false;
-    
-                for(let genre of genres) {
-                  if(genre.genre_name === genreToAdd) {
-                    doesGenreExist = true;
-                  }
-                }
-                if(doesGenreExist) {
-                  setSelectedGenre(genre.id);
-                } 
-                else {
-                  dispatch({
-                  type: 'ADD_NEW_GENRE',
-                  payload: {genreToAdd}
-                })
-                setSelectedGenre(genreToAdd);
-              }
-            })
-              .catch(err => {
-                
-              })
-          })
-          .then(() => Swal.fire({
-            title: 'Results',
-            text: {title},
-            imageUrl: {bookCoverImage},
-            imageWidth: 400,
-            imageHeight: 200
-          }))
-          .catch(() => {
-            Swal.insertQueueStep({
-              icon: 'error',
-              title: 'Unable to get your public IP'
-            })
-          })
-      }
-    }])
-  }
-
   return (
     <div className="container">
     <Button variant="contained" color="primary" onClick={handleModal}>
@@ -230,13 +172,12 @@ function AddBookForm() {
           onUpdate={(err, result) => {
             if(result) {
               console.log('result', result.text)
-              handleScan();
               setIsbn(result.text);
             }
           }}
         />
         <Typography align="center">Results: {isbn}</Typography>
-        <Button color="primary" onClick={handleConfirm}>Confirm</Button>
+        <Button color="primary">Confirm</Button>
         <Button color="secondary" onClick={handleModal}>Cancel</Button>
       </Paper>  
     </Modal>
