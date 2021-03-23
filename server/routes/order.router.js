@@ -8,7 +8,8 @@ router.get('/', (req, res) => {
                   FROM "books" 
                   JOIN "orders_books" ON "books".id="orders_books".book_id 
                   JOIN "orders" ON "orders_books".order_id="orders".id 
-                  WHERE "orders".user_id=$1;`;
+                  WHERE "orders".user_id=$1
+                  ORDER BY "orders".order_date DESC;`;
   pool.query(query, [userId])
     .then(result => {
       res.send(result.rows);
@@ -20,12 +21,13 @@ router.get('/', (req, res) => {
 })
 
 router.get('/all', (req, res) => {
-  const query = `SELECT "orders".id, "users".first_name, "users".last_name, "orders".is_fulfilled, JSON_AGG("books".title) AS "books"
+  const query = `SELECT "orders".id, "users".first_name, "users".last_name, "orders".is_fulfilled, "orders".order_date, JSON_AGG("books".title) AS "books"
                   FROM "users"
                   JOIN "orders" ON "users".id="orders".user_id
                   JOIN "orders_books" ON "orders".id="orders_books".order_id
                   JOIN "books" ON "orders_books".book_id="books".id
-                  GROUP BY "orders".id, "users".first_name, "users".last_name;`;
+                  GROUP BY "orders".id, "users".first_name, "users".last_name
+                  ORDER BY "orders".order_date DESC;`;
   pool.query(query)
     .then(result => {
       res.send(result.rows);

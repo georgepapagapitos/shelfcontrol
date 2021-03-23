@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Typography, IconButton, makeStyles, Button, Divider, CardMedia, Card, CardActionArea, CardContent, CardActions, Grid, TextField, CardHeader, Collapse, Box } from "@material-ui/core";
-import AddShoppingCartOutlinedIcon from '@material-ui/icons/AddShoppingCartOutlined';
-import AddBook from '../AddBook/AddBook';
 import Swal from 'sweetalert2';
 import InfoIcon from '@material-ui/icons/Info';
 import EditIcon from '@material-ui/icons/Edit'
@@ -15,11 +13,16 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 import { useHistory } from 'react-router';
+import { Autocomplete } from '@material-ui/lab';
 
 
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 345,
+  },
+  header: {
+    display: "block",
+    overflow: "hidden"
   },
   media: {
     height: 0,
@@ -65,6 +68,13 @@ const useStyles = makeStyles(theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  option: {
+    fontSize: 15,
+    '& > span': {
+      marginRight: 10,
+      fontSize: 18,
+    },
+  },
 }))
 
 function BookListView() {
@@ -75,6 +85,9 @@ function BookListView() {
     dispatch({
       type: 'FETCH_ACTIVE_CART'
     });
+    dispatch({
+      type: 'FETCH_READING_GRADE_LEVELS'
+    });
   }, [])
   
   const dispatch = useDispatch();
@@ -83,9 +96,16 @@ function BookListView() {
   const books = useSelector(store => store.books);
   const user = useSelector(store => store.user);
   const cart = useSelector(store => store.cart);
-  const [filter, setFilter] = useState('');
+  const readingGradeLevels = useSelector(store => store.readingGradeLevels);
+  const [titleFilter, setTitleFilter] = useState('');
+  const [readingLevelInput, setReadingLevelInput] = useState('');
+  const [readingLevelFilter, setReadingLevelFilter] = useState('');
+
   const [expanded, setExpanded] = useState(false);
   const [expandedId, setExpandedId] = useState(-1);
+
+  const [showTitle, setShowTitle] = useState(true);
+  const [showTitleId, setShowTitleId] = useState(-1);
 
   const handleAddToCart = (book) => {
     if(cart.length) {
@@ -117,20 +137,20 @@ function BookListView() {
     })
   }
 
-  const handleDelete = (bookId) => {
-    console.log('in delete', bookId);
+  const handleDelete = (book) => {
+    console.log('in delete', book.id);
     Swal.fire({
-      title: 'Are you sure?',
+      title: `Are you sure you want to delete ${book.title}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3f51b5',
       cancelButtonColor: '#f50057',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Yes'
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch({
           type: 'DELETE_BOOK',
-          payload: { bookId }
+          payload: { bookId: book.id }
         })
         Swal.fire(
           'Deleted!',
@@ -149,25 +169,55 @@ function BookListView() {
     setExpandedId(expandedId === i ? -1 : i);
   }
 
+  const handleShowTitle = (i) => {
+    setShowTitleId(showTitleId === i ? -1 : i);
+  }
+
   return (
     <div className='container'>
       <Typography className={classes.title} gutterBottom variant="h3" component="div" align="center">
         Available Books
       </Typography>
       <div className={classes.searchContainer}>
-            <SearchIcon className={classes.searchIcon} />
-            <TextField className={classes.searchInput} onChange={(event) => {setFilter(event.target.value)}} label="Search Books" variant="standard" />
+        <SearchIcon className={classes.searchIcon} />
+        <TextField className={classes.searchInput} onChange={(event) => {setTitleFilter(event.target.value)}} label="Search Books" variant="standard" />
+      </div>
+      <div className={classes.searchContainer}>
+        <SearchIcon className={classes.searchIcon}></SearchIcon>
+        <Autocomplete
+          value={readingLevelFilter.reading_grade_level ? readingLevelFilter.reading_grade_level : ''}
+          options={readingGradeLevels}
+          getOptionLabel={(option) => option.reading_grade_level ? option.reading_grade_level : ''}
+          onChange={(event, newValue) => newValue ? setReadingLevelFilter(newValue.reading_grade_level) : setReadingLevelFilter('')}
+          inputValue={readingLevelInput}
+          onInputChange={(event, newInputValue) => {
+            {newInputValue ? setReadingLevelInput(newInputValue) : setReadingLevelInput('')};
+          }}
+          id="reading-grade-levels"
+          style={{ width: 300 }}
+          renderInput={(params) => <TextField className={classes.searchInput} {...params} label="Reading Level" variant="standard" />}
+        />
       </div>
       <Divider className={classes.divider}/>
       <Grid container spacing={4} className={classes.gridContainer} justify="center">
         {books.map((book, i) => {
-          if(book.quantity > 0 && book.title.toLowerCase().includes(filter.toLowerCase())) {
+          if(book.quantity > 0 && book.title.toLowerCase().includes(titleFilter.toLowerCase()) && book.reading_grade_level.includes(readingLevelFilter)) {
             return (
 
               <Grid key={book.id} item xs={12} sm={6} md={4}>
                 <Card className={classes.root}>
                   <CardHeader
-                    title={book.title}
+                    className={classes.header}
+                    title={<Typography
+                            key={book.id}
+                            onClick={() => handleShowTitle(i)} 
+                            noWrap={showTitleId !== i} 
+                            gutterBottom
+                            variant="h6" 
+                            component="h4"
+                          >
+                            {book.title}
+                          </Typography>}
                     subheader={book.author}
                   />
                   <CardMedia
@@ -181,10 +231,11 @@ function BookListView() {
                       {book.reading_grade_level} Reading Level
                     </Typography>
                   </CardContent>
+                  <Divider />
                   <CardActions disableSpacing>
                     {user.auth_level === 'ADMIN' && <IconButton color="primary" variant="outlined"><EditIcon /></IconButton>}
                     {user.auth_level === 'USER' && <Button color="primary" variant="contained" onClick={() => handleAddToCart(book)}>Add To Cart</Button>}
-                    {(user.auth_level === 'ADMIN') && <IconButton color="secondary" variant="outlined" onClick={() => handleDelete(book.id)}><DeleteIcon /></IconButton>}
+                    {(user.auth_level === 'ADMIN') && <IconButton color="secondary" variant="outlined" onClick={() => handleDelete(book)}><DeleteIcon /></IconButton>}
                     <IconButton
                       className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
@@ -197,11 +248,9 @@ function BookListView() {
                   </CardActions>
                   <Collapse in={expandedId === i} time="auto" unmountOnExit>
                     <CardContent>
-                      <Typography paragraph>
-                        <Box fontStyle="italic">
-                          {book.description}              
-                        </Box>
-                      </Typography>
+                      <Box fontStyle="italic">
+                        <Typography>{book.description}</Typography>
+                      </Box>
                     </CardContent>
                   </Collapse>
                 </Card>

@@ -67,7 +67,7 @@ function AddBookForm() {
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
     axios.get(`${url}`)
       .then((data) => {
-        axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`)
+        axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
           .then((image) => {
             console.log('image', image.config.url)
             const genreToAdd = data.data.items[0].volumeInfo.categories[0]
@@ -131,6 +131,7 @@ function AddBookForm() {
     const bookToAdd = {
       title,
       author,
+      isbn,
       selectedGenre,
       description,
       bookCoverImage,
