@@ -9,7 +9,6 @@ import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MenuIcon from '@material-ui/icons/Menu';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
 const StyledBadge = withStyles((theme) => ({
@@ -64,7 +63,7 @@ function Nav() {
             <MenuIcon />
           </IconButton> */}
           {!user.id && (
-            <Typography className={classes.title} variant="h5">ShelfControl</Typography>
+            <Link to="/about" style={{ textDecoration: 'none', color: 'white' }}><Typography className={classes.title} variant="h5">ShelfControl</Typography></Link>
           )}
           {user.id && (
               <IconButton edge="end" className={classes.menuButton} aria-label="home">

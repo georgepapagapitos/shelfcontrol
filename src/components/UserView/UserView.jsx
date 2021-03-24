@@ -5,9 +5,7 @@ import moment from 'moment';
 import DoneIcon from '@material-ui/icons/Done';
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 650
-  }
+
 })
 
 function UserView() {

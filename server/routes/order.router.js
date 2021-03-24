@@ -27,7 +27,7 @@ router.get('/all', (req, res) => {
                   JOIN "orders_books" ON "orders".id="orders_books".order_id
                   JOIN "books" ON "orders_books".book_id="books".id
                   GROUP BY "orders".id, "users".first_name, "users".last_name
-                  ORDER BY "orders".order_date DESC;`;
+                  ORDER BY "orders".id DESC;`;
   pool.query(query)
     .then(result => {
       res.send(result.rows);

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Typography, TextField } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Typography, TextField, Divider } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DoneIcon from '@material-ui/icons/Done';
 import SearchIcon from '@material-ui/icons/Search';
@@ -90,7 +90,7 @@ function AdminView() {
             >
             <Typography className={classes.heading}>{orderLabel}</Typography>
             <Typography className={classes.secondaryHeading}>
-              {userFullName} {moment(order.order_date).format('MM-DD-YYYY')}
+              {userFullName} <Divider/> {moment(order.order_date).format('MM-DD-YYYY')}
             </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -98,12 +98,11 @@ function AdminView() {
             {order.books.map((book, i) => {
                 return (
                   <li>
-                    {book}
+                    <Typography variant="caption">{book}</Typography>
                   </li>
                 )
               })}
-              {order.is_fulfilled ? <div><Typography variant="body2">Order Sent</Typography></div> :
-                <Button type="button" variant="contained" color="primary" onClick={() => markOrderSent(order.id)}>Mark Sent</Button>}
+              {!order.is_fulfilled &&<Button size="small" type="button" variant="contained" color="primary" onClick={() => markOrderSent(order.id)}>Mark Sent</Button>}
             </ul>
             </AccordionDetails>
           </Accordion>

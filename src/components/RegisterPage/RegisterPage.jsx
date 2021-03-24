@@ -24,6 +24,7 @@ function RegisterPage() {
         <RegisterForm />
       </Paper>
       <Button
+        variant="outlined"
         color="primary"
         type="button"
         onClick={() => {

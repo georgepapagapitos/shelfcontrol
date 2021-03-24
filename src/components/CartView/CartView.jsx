@@ -7,9 +7,6 @@ import { Button, Divider, IconButton, makeStyles, Paper, Table, TableBody, Table
 import ClearIcon from '@material-ui/icons/Clear';
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
   button: {
     marginTop: 10
   },
@@ -70,12 +67,13 @@ function CartView() {
               date: date
             }
           })
-          Swal.fire(
-            'Order complete!',
-            'Your books will on their way soon!',
-            'success'
-          )
-          history.push('/books');
+          Swal.fire({
+            title: 'Order complete!',
+            confirmButtonColor: '#3f51b5',
+            text: 'Your books will on their way soon!',
+            icon: 'success'
+          })
+          history.push('/user');
         }
       })
     } else {

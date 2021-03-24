@@ -136,6 +136,7 @@ function BookListView() {
     })
     Swal.fire({
       icon: 'success',
+      confirmButtonColor: '#3f51b5',
       title: 'Added Book To Cart',
       text: `${book.title}`,
     })
@@ -191,8 +192,8 @@ function BookListView() {
         title: book.title,
         text: book.genre_name,
         imageUrl: book.book_cover_image,
-        imageWidth: '70%',
-        imageHeight: '70%',
+        imageWidth: '200',
+        imageHeight: '225',
         imageAlt: book.title,
       })
     }
@@ -263,6 +264,8 @@ function BookListView() {
                     <Typography align="center" variant="body2" noWrap color="textSecondary">
                       {book.reading_grade_level} Reading Level
                     </Typography>
+                    <Divider orientation="vertical" flexItem/>
+                    <Typography align="center" variant="body2" noWrap color="textSecondary">{book.genre_name}</Typography>
                   </CardContent>
                   <Divider />
                   <CardActions disableSpacing>

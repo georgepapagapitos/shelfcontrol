@@ -24,6 +24,7 @@ function LoginPage() {
       </Paper>
       
         <Button
+          variant="outlined"
           color="primary"
           type="button"
           onClick={() => {
