@@ -12,7 +12,14 @@ const useStyles = makeStyles({
   },
   button: {
     marginTop: 10
-  }
+  },
+  empty: {
+      marginTop: 40,
+      marginBottom: 40,
+      maxWidth: 350,
+      paddingTop: 25,
+      paddingBottom: 25
+    }
 })
 
 function CartView() {
@@ -46,33 +53,40 @@ function CartView() {
 
   const handleCheckout = (cart) => {
     console.log('in handlecheckout', cart, date);
-    Swal.fire({
-      title: 'Are you ready to checkout?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#f50057',
-      confirmButtonText: 'Yes, checkout!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch({
-          type: 'CHECKOUT',
-          payload: {
-            cart: cart,
-            date: date
-          }
-        })
-        Swal.fire(
-          'Order complete!',
-          'Your books will on their way soon!.',
-          'success'
-        )
-        history.push('/user');
-      }
-    })
+    if(cart.length > 0) {
+      Swal.fire({
+        title: 'Are you ready to checkout?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3f51b5',
+        cancelButtonColor: '#f50057',
+        confirmButtonText: 'Yes, checkout!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch({
+            type: 'CHECKOUT',
+            payload: {
+              cart: cart,
+              date: date
+            }
+          })
+          Swal.fire(
+            'Order complete!',
+            'Your books will on their way soon!',
+            'success'
+          )
+          history.push('/books');
+        }
+      })
+    } else {
+      Swal.fire(
+        'Your cart is empty',
+      )
+    }
   }
 
   return (
+    cart.length > 0 ?
     <div className="container">
       <Typography gutterBottom variant="h3">Current Cart</Typography>
       <Divider />
@@ -108,6 +122,8 @@ function CartView() {
     <Button className={classes.button} type="button" variant="outlined" color="primary" onClick={() => handleCheckout(cart)}>Checkout</Button>
       </div>
     </div>
+    : <center><Typography className={classes.empty} variant="h4">Your Cart Is Empty!</Typography><Button color="secondary" variant="outlined" onClick={history.goBack}>Back</Button></center>
+
   )
 }
 

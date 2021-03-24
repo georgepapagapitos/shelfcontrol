@@ -41,12 +41,8 @@ function UserView() {
 
   return (
     <div className="container">
-      <Typography gutterBottom variant="h5" align="left" component="div">
-        Welcome, {user.first_name}
-      </Typography>
-      <Divider/>
-      <Typography variant="h2" component="div" align="center">
-        Book History
+      <Typography variant="h4" component="div" align="center" gutterBottom>
+        {user.first_name}'s Books
       </Typography>
       <TableContainer component={Paper}>
         <Table className={classes.table}>
