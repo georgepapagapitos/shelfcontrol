@@ -50,6 +50,7 @@ function LoginForm() {
       <center>
         <div>
             <TextField
+              autoComplete="off"
               variant="outlined"
               label="Username"
               type="text"

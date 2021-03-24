@@ -18,11 +18,11 @@ function LoginPage() {
   const history = useHistory();
 
   return (
-    <>
+    <center>
       <Paper className={classes.root}>
         <LoginForm />
       </Paper>
-      <center>
+      
         <Button
           color="primary"
           type="button"
@@ -33,7 +33,6 @@ function LoginPage() {
           Register
         </Button>
       </center>
-    </>
   );
 }
 
