@@ -1,3 +1,4 @@
+import { Typography, Paper } from '@material-ui/core';
 import React from 'react';
 
 // This is one of our simplest components
@@ -7,11 +8,9 @@ import React from 'react';
 
 function AboutPage() {
   return (
-    <div className="container">
-      <div>
-        <p>This about page is for anyone to read!</p>
-      </div>
-    </div>
+      <Paper>
+        <Typography align="center">This about page is for anyone to read!</Typography>
+      </Paper>
   );
 }
 

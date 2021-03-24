@@ -4,10 +4,20 @@ import './LandingPage.css';
 
 // CUSTOM COMPONENTS
 import RegisterForm from '../RegisterForm/RegisterForm';
-import { Button, Typography } from '@material-ui/core';
+import { Button, makeStyles, Paper, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: 40,
+    marginBottom: 40,
+    maxWidth: 350,
+    paddingTop: 25,
+    paddingBottom: 25
+  }
+}))
 
 function LandingPage() {
-  const [heading, setHeading] = useState('Welcome');
+  const classes = useStyles();
   
   const history = useHistory();
 
@@ -16,21 +26,15 @@ function LandingPage() {
   };
 
   return (
-    <div className="container">
-
-      <div className="grid">
-
-        <div className="grid-col grid-col_4">
-          <RegisterForm />
-          <center>
-            <h4>Already a Member?</h4>
-            <Button variant="contained" color="primary" className="btn btn_sizeSm" onClick={onLogin}>
-              Login
-            </Button>
-          </center>
-        </div>
-      </div>
-    </div>
+    <center>
+      <Paper className={classes.root}>
+        <RegisterForm />
+      </Paper>
+          <Typography gutterBottom>Already a Member?</Typography>
+          <Button variant="outlined" color="primary" onClick={onLogin}>
+            Login
+          </Button>
+      </center>
   );
 }
 

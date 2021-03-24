@@ -63,6 +63,9 @@ function Nav() {
           {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton> */}
+          {!user.id && (
+            <Typography className={classes.title} variant="h5">ShelfControl</Typography>
+          )}
           {user.id && (
               <IconButton edge="end" className={classes.menuButton} aria-label="home">
                 <Link to="/books">

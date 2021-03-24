@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Button, Card, Divider, Input, makeStyles, TextField, Typography } from '@material-ui/core';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+  },
+}));
 
 function RegisterForm() {
+
+  const classes = useStyles();
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -29,65 +41,61 @@ function RegisterForm() {
   }; // end registerUser
 
   return (
-    <form className="formPanel" onSubmit={registerUser}>
-      <h2>Register User</h2>
-      {errors.registrationMessage && (
-        <h3 className="alert" role="alert">
-          {errors.registrationMessage}
-        </h3>
-      )}
-      <div>
-        <label htmlFor="username">
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={username}
-            required
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={password}
-            required
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="firstName">
-          First Name:
-          <input
-            type="text"
-            name="firstName"
-            value={firstName}
-            required
-            onChange={(event) => setFirstName(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="lastName">
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={lastName}
-            required
-            onChange={(event) => setLastName(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <Button variant="contained" color="primary" type="submit" name="submit">Register</Button>
-      </div>
-    </form>
+      <form className={classes.root} onSubmit={registerUser}>
+        <Typography variant="h4" align="center" gutterBottom>Register User</Typography>
+        {errors.registrationMessage && (
+          <h3 className="alert" role="alert">
+            {errors.registrationMessage}
+          </h3>
+        )}
+
+            <TextField
+              variant="outlined"
+              size="small"
+              type="text"
+              label="Username"
+              value={username}
+              required
+              onChange={(event) => setUsername(event.target.value)}
+            />
+
+            <TextField
+              variant="outlined"
+              size="small"
+              type="password"
+              label="Password"
+              value={password}
+              required
+              onChange={(event) => setPassword(event.target.value)}
+            />
+
+
+            <TextField
+              variant="outlined"
+              size="small"
+              type="text"
+              label="First Name"
+              value={firstName}
+              required
+              onChange={(event) => setFirstName(event.target.value)}
+            />
+
+
+            <TextField
+              variant="outlined"
+              size="small"
+              type="text"
+              label="Last Name"
+              value={lastName}
+              required
+              onChange={(event) => setLastName(event.target.value)}
+            />
+          
+          <div>
+            <Button variant="contained" color="primary" type="submit" name="submit">Register</Button>
+          </div>
+
+      </form>
   );
 }
 
