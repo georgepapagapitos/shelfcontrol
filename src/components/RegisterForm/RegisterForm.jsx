@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button } from '@material-ui/core';
 
 function RegisterForm() {
   
@@ -84,7 +85,7 @@ function RegisterForm() {
         </label>
       </div>
       <div>
-        <input className="btn" type="submit" name="submit" value="Register" />
+        <Button variant="contained" color="primary" type="submit" name="submit">Register</Button>
       </div>
     </form>
   );

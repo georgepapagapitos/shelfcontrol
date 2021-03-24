@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useHistory } from "react-router";
 import Swal from 'sweetalert2';
 import { Button, Divider, IconButton, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const useStyles = makeStyles({
   table: {
@@ -97,7 +97,7 @@ function CartView() {
                     {book.author}
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton color="secondary"  onClick={() => handleRemove(book)}><DeleteIcon /></IconButton>
+                    <IconButton color="secondary"  onClick={() => handleRemove(book)}><ClearIcon /></IconButton>
                   </TableCell>
                 </TableRow>
               )

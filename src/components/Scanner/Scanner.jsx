@@ -20,7 +20,7 @@ function Scanner({isbn, setIsbn}) {
           }}
       />
     </Card>
-      <TextField placeholder="ISBN" value={isbn} onChange={event => setIsbn(event.currentTarget.value)}></TextField>
+      <TextField placeholder="ISBN" value={isbn} onChange={event => setIsbn((event.currentTarget.value).replace(/\D/g, ''))}></TextField>
     </div>
 
   )

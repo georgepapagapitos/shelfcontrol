@@ -1,7 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, FormControlLabel, makeStyles, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Typography, TextField } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DoneIcon from '@material-ui/icons/Done';
+import SearchIcon from '@material-ui/icons/Search';
+import { fade } from '@material-ui/core/styles';
+import moment from 'moment';
 
 import './AdminView.css';
 
@@ -18,6 +22,29 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
+  searchContainer: {
+    display: 'flex',
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    marginLeft: '20px',
+    paddingLeft: '10px',
+    paddingRight: '20px',
+    marginTop: "5px",
+    marginBottom: "5px",
+  },
+  searchIcon: {
+    alignSelf: 'flex-end',
+    marginBottom: '5px',
+  },
+  searchInput: {
+    width: '200px',
+    margin: "5px",
+    opacity: '0.6',
+    padding: `0px ${theme.spacing(1)}px`,
+    fontSize: '0.8rem',
+    '&:hover': {
+      backgroundColor: '#f2f2f2'
+    },
+  },
 }));
 
 function AdminView() {
@@ -25,6 +52,7 @@ function AdminView() {
   const dispatch = useDispatch();
   const orders = useSelector((store) => store.orders);
   const classes = useStyles();
+  const [nameFilter, setNameFilter] = useState('');
 
   useEffect(() => {
     dispatch({
@@ -42,12 +70,16 @@ function AdminView() {
 
   return (
     <div className="container">
-      <Typography variant="h2" align="center">Admin Page</Typography>
+      <Typography variant="h2" align="center" gutterBottom>Admin Page</Typography>
+      <div className={classes.searchContainer}>
+        <SearchIcon className={classes.searchIcon} />
+        <TextField className={classes.searchInput} onChange={(event) => {setNameFilter(event.target.value)}} label="Search by name" variant="standard" />
+      </div>
       {orders.map((order, i) => {
 
-        let orderLabel = `Order ID: ${order.id}`;
+        let orderLabel = order.is_fulfilled ? <DoneIcon /> : `Order #${order.id}`
         let userFullName = `${order.first_name} ${order.last_name}`;
-
+        if(userFullName.toLowerCase().includes(nameFilter.toLowerCase())) {
         return (
           <Accordion>
             <AccordionSummary
@@ -58,7 +90,7 @@ function AdminView() {
             >
             <Typography className={classes.heading}>{orderLabel}</Typography>
             <Typography className={classes.secondaryHeading}>
-              {userFullName}
+              {userFullName} {moment(order.order_date).format('MM-DD-YYYY')}
             </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -76,6 +108,7 @@ function AdminView() {
             </AccordionDetails>
           </Accordion>
         )
+        }
       })}
     </div>
   )

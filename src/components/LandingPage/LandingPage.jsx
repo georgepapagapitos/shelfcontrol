@@ -4,6 +4,7 @@ import './LandingPage.css';
 
 // CUSTOM COMPONENTS
 import RegisterForm from '../RegisterForm/RegisterForm';
+import { Button, Typography } from '@material-ui/core';
 
 function LandingPage() {
   const [heading, setHeading] = useState('Welcome');
@@ -16,18 +17,16 @@ function LandingPage() {
 
   return (
     <div className="container">
-      <h2>{heading}</h2>
 
       <div className="grid">
 
         <div className="grid-col grid-col_4">
           <RegisterForm />
-
           <center>
             <h4>Already a Member?</h4>
-            <button className="btn btn_sizeSm" onClick={onLogin}>
+            <Button variant="contained" color="primary" className="btn btn_sizeSm" onClick={onLogin}>
               Login
-            </button>
+            </Button>
           </center>
         </div>
       </div>

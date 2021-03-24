@@ -19,7 +19,7 @@ function AddBookInfo(props) {
 
   const readingGradeLevels = useSelector(store => store.readingGradeLevels);
   const genres = useSelector(store => store.genres);
-
+  console.log('cover', props.bookCoverImage)
   return (
     <div className="container">
       <img src={props.bookCoverImage}></img>
@@ -56,7 +56,7 @@ function AddBookInfo(props) {
         </label>
         </form>
         <Typography variant="h5">{props.title}</Typography>
-        <Typography variant="subtitle">{props.author}</Typography>
+        <Typography>{props.author}</Typography>
     </div>
   )
 }

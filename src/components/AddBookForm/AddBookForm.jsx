@@ -59,24 +59,39 @@ function AddBookForm() {
     }
   }
 
-  const handleNext = () => {
+  async function handleNext() {
 
     setActiveStep(1);
 
-    console.log('isbn', isbn);
+    // const headers = {
+    //   'Content-Type': 'application/json',
+    //   'Authorization': process.env.REACT_APP_API_KEY
+    // }
+
+    // axios.get(`https://api2.isbndb.com/book/${isbn}`, {headers})
+    //   .then(data => {
+    //     console.log(data.data.book);
+    //     const book = data.data.book;
+    //     setTitle(book.title);
+    //     setAuthor(book.authors[0]);
+    //     setDescription(book.synopsys);
+    //     setBookCoverImage(book.image);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error)
+    //   });
+
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
-    axios.get(`${url}`)
+    await axios.get(`${url}`)
       .then((data) => {
         axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
           .then((image) => {
-            console.log('image', image.config.url)
+            setBookCoverImage(image.config.url);
             const genreToAdd = data.data.items[0].volumeInfo.categories[0]
-            console.log('scanned genre', genreToAdd);
             setTitle(data.data.items[0].volumeInfo.title);
             setAuthor(data.data.items[0].volumeInfo.authors[0]);
             setInfoPage(data.data.items[0].volumeInfo.previewLink);
             setDescription(data.data.items[0].volumeInfo.description);
-            setBookCoverImage(image.config.url);
 
             let doesGenreExist = false;
             let genreId = '';
@@ -127,44 +142,47 @@ function AddBookForm() {
   const handleConfirm = (event) => {
 
     event.preventDefault();
-
-    const bookToAdd = {
-      title,
-      author,
-      isbn,
-      selectedGenre,
-      description,
-      bookCoverImage,
-      readingGradeLevel,
-      infoPage,
-    };
-
-    console.log('booktoAdd', bookToAdd);
-
-    let doesBookExist = false;
-
-    for(let book of books) {
-      if(book.isbn === isbn) {
-        doesBookExist = true;
+    if(readingGradeLevel !== "") {
+      const bookToAdd = {
+        title,
+        author,
+        isbn,
+        selectedGenre,
+        description,
+        bookCoverImage,
+        readingGradeLevel,
+        infoPage,
+      };
+  
+      console.log('booktoAdd', bookToAdd);
+  
+      let doesBookExist = false;
+  
+      for(let book of books) {
+        if(book.isbn === isbn) {
+          doesBookExist = true;
+        }
       }
-    }
-    if(doesBookExist) {
-      dispatch({
-        type: 'INCREASE_QUANTITY',
-        payload: {isbn: isbn}
-      })
-    } else {
+      if(doesBookExist) {
         dispatch({
-          type: 'ADD_BOOK',
-          payload: bookToAdd
+          type: 'INCREASE_QUANTITY',
+          payload: {isbn: isbn}
         })
-    };
-    Swal.fire({
-      icon: 'success',
-      title: 'Book added to inventory'
-    })
-    handleReset();
-    history.push('/books');
+      } else {
+          dispatch({
+            type: 'ADD_BOOK',
+            payload: bookToAdd
+          })
+      };
+      Swal.fire({
+        icon: 'success',
+        title: 'Book added to inventory'
+      })
+      handleReset();
+      history.push('/books');
+    } else {
+      window.alert('Please select a reading grade level and a genre.')
+    }
   }
  
   return(
@@ -184,12 +202,12 @@ function AddBookForm() {
       {activeStep === 1 ? (
         <div>
         <Card>
-          <AddBookInfo readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage} bookCoverImage={bookCoverImage} title={title} author={author} selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre}/>
+          <AddBookInfo readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage} bookCoverImage={bookCoverImage} setBookCoverImage={setBookCoverImage} title={title} author={author} selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre}/>
         </Card>
           <Button onClick={handleBack} className={classes.button}>
             Back
           </Button>
-          <Button onClick={handleConfirm} variant="contained" color="primary">Confirm</Button>
+          <Button onClick={handleConfirm} type="button" variant="contained" color="primary">Confirm</Button>
         </div>
       ) : (
         <div>

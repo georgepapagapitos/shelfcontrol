@@ -2,6 +2,7 @@ import { Divider, Typography, makeStyles, TableContainer, Paper, Table, TableHea
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import moment from 'moment';
+import DoneIcon from '@material-ui/icons/Done';
 
 const useStyles = makeStyles({
   table: {
@@ -16,6 +17,8 @@ function UserView() {
   const orders = useSelector((store) => store.orders);
   const user = useSelector((store) => store.user);
 
+  const date = moment().format();
+
   useEffect(() => {
     dispatch({
       type: 'FETCH_USER_ORDERS'
@@ -25,13 +28,20 @@ function UserView() {
     });
   }, []);
 
-  const handleFinished = () => {
-    console.log('finished');
+  const handleFinish = (order) => {
+    console.log('finished', order);
+    dispatch({
+      type: 'FINISH_BOOK',
+      payload: {
+        order: order,
+        date: date
+      }
+    });
   }
 
   return (
     <div className="container">
-      <Typography gutterBottom variant="h3" align="left" component="div">
+      <Typography gutterBottom variant="h5" align="left" component="div">
         Welcome, {user.first_name}
       </Typography>
       <Divider/>
@@ -54,11 +64,11 @@ function UserView() {
                   {order.title}
                 </TableCell>
                 <TableCell align="right">
-                  {moment(order.order_date).format('MM-DD-YYYY')}
+                  {moment(order.order_date).format('MMM DD YYYY')}
                 </TableCell>
                 <TableCell align="right">
-                  {(order.is_fulfilled && order.date_completed === null) ? <Button align="right" variant="contained" color="primary" type="button" onClick={handleFinished}>Finished</Button> : 
-                  (order.is_fulfilled && order.date_completed) ? 'Book Finished!' : 'On the way!'}
+                  {(order.is_fulfilled && order.date_completed === null) ? <Button align="right" variant="contained" color="primary" type="button" onClick={() => handleFinish(order)}>Finished</Button> : 
+                  (order.is_fulfilled && order.date_completed) ? `Finished - ${moment(order.date_completed).format('MMM DD YYYY')}` : 'On the way!'}
                 </TableCell>
               </TableRow>
             ))}

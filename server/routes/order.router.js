@@ -64,4 +64,20 @@ router.put('/', (req, res) => {
     })
 })
 
+router.put('/finish', (req, res) => {
+  const date = req.body.date;
+  const bookId = req.body.order.book_id;
+  const orderId = req.body.order.order_id;
+  console.log(date, bookId, orderId)
+  const query = `UPDATE "orders_books" SET "date_completed"=$1 WHERE "book_id"=$2 AND "order_id"=$3 RETURNING "date_completed";`;
+  pool.query(query, [date, bookId, orderId])
+    .then(result => {
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log('error in PUT /order/finish', err);
+      res.sendStatus(500);
+    })
+})
+
 module.exports = router;

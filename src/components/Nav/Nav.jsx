@@ -39,6 +39,9 @@ function Nav() {
   const classes = useStyles();
   const user = useSelector((store) => store.user);
   const cart = useSelector((store) => store.cart);
+  const orders = useSelector((store) => store.orders);
+
+  let newOrders = orders.filter(order => !order.is_fulfilled);
 
   let loginLinkData = {
     path: '/login',
@@ -74,11 +77,17 @@ function Nav() {
                 </Link>
               </IconButton>
             )}
-          <IconButton edge="end" className={classes.menuButton} aria-label="user">
-            <Link to={loginLinkData.path}>
-              {loginLinkData.text}
-            </Link>
-          </IconButton>
+            <IconButton edge="end" className={classes.menuButton} aria-label="user">
+              {user.auth_level === 'ADMIN' ? 
+                <StyledBadge badgeContent={newOrders.length} color="secondary">
+                  <Link to={loginLinkData.path}>
+                    {loginLinkData.text}
+                  </Link>
+              </StyledBadge> :
+              <Link to={loginLinkData.path}>
+                {loginLinkData.text}
+              </Link>}
+            </IconButton>
           {user.auth_level === 'USER' && (            
             <IconButton edge="end" className={classes.menuButton} aria-label="cart">
               <StyledBadge badgeContent={cart.length} color="secondary">

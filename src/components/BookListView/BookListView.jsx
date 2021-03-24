@@ -2,14 +2,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Typography, IconButton, makeStyles, Button, Divider, CardMedia, Card, CardActionArea, CardContent, CardActions, Grid, TextField, CardHeader, Collapse, Box } from "@material-ui/core";
 import Swal from 'sweetalert2';
-import InfoIcon from '@material-ui/icons/Info';
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete';
-import Popup from 'reactjs-popup';
 import './BookListView.css';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 import { useHistory } from 'react-router';
@@ -107,6 +104,14 @@ function BookListView() {
   const [showTitle, setShowTitle] = useState(true);
   const [showTitleId, setShowTitleId] = useState(-1);
 
+  const [editMode, setEditMode] = useState(false);
+
+  const handleEdit = (book) => {
+    console.log('editclicked', book);
+    setEditMode(true);
+    
+  }
+
   const handleAddToCart = (book) => {
     if(cart.length) {
       console.log('active order');
@@ -163,6 +168,35 @@ function BookListView() {
 
   const displayDetails = (book) => {
     console.log('details', book);
+    if(user.auth_level === 'USER') {
+      Swal.fire({
+        title: book.title,
+        text: book.genre_name,
+        imageUrl: book.book_cover_image,
+        imageAlt: book.title,
+        imageHeight: 300,
+        imageWidth: 275,
+        showCancelButton: true,
+        confirmButtonColor: '#3f51b5',
+        cancelButtonColor: '#f50057',
+        confirmButtonText: 'Add To Cart'
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          handleAddToCart(book);
+          history.push('/cart');
+        }
+      })
+    } else {
+      Swal.fire({
+        title: book.title,
+        text: book.genre_name,
+        imageUrl: book.book_cover_image,
+        imageWidth: '70%',
+        imageHeight: '70%',
+        imageAlt: book.title,
+      })
+    }
   }
 
   const handleExpandClick = (i) => {
@@ -233,9 +267,11 @@ function BookListView() {
                   </CardContent>
                   <Divider />
                   <CardActions disableSpacing>
-                    {user.auth_level === 'ADMIN' && <IconButton color="primary" variant="outlined"><EditIcon /></IconButton>}
+                    {user.auth_level === 'ADMIN' && <>
+                      <IconButton onClick={() => handleEdit(book)} color="primary" variant="outlined"><EditIcon /></IconButton>
+                      <IconButton color="secondary" variant="outlined" onClick={() => handleDelete(book)}><DeleteIcon /></IconButton>
+                    </>}
                     {user.auth_level === 'USER' && <Button color="primary" variant="contained" onClick={() => handleAddToCart(book)}>Add To Cart</Button>}
-                    {(user.auth_level === 'ADMIN') && <IconButton color="secondary" variant="outlined" onClick={() => handleDelete(book)}><DeleteIcon /></IconButton>}
                     <IconButton
                       className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
@@ -255,8 +291,7 @@ function BookListView() {
                   </Collapse>
                 </Card>
               </Grid>
-              
-          )
+            )
           }
         })}
       </Grid>

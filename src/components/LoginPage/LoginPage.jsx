@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginForm from '../LoginForm/LoginForm';
 import { useHistory } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
 function LoginPage() {
   const history = useHistory();
@@ -9,7 +10,9 @@ function LoginPage() {
     <div>
       <LoginForm />
       <center>
-        <button
+        <Button
+          variant="contained"
+          color="primary"
           type="button"
           className="btn btn_asLink"
           onClick={() => {
@@ -17,7 +20,7 @@ function LoginPage() {
           }}
         >
           Register
-        </button>
+        </Button>
       </center>
     </div>
   );

@@ -41,11 +41,23 @@ function* markOrderSent(action) {
   }
 }
 
+function* finishBook(action) {
+  try {
+    console.log('action', action.payload)
+    yield axios.put('/api/order/finish', action.payload);
+    yield put({ type: 'FETCH_USER_ORDERS' });
+  }
+  catch(err) {
+    console.log('error in finishBook', err)
+  }
+}
+
 function* orderSaga() {
   yield takeLatest('FETCH_USER_ORDERS', fetchUserOrders);
   yield takeLatest('FETCH_ALL_ORDERS', fetchAllOrders);
   yield takeLatest('FETCH_ACTIVE_ORDERS', fetchActiveOrders);
   yield takeLatest('MARK_ORDER_SENT', markOrderSent);
+  yield takeLatest('FINISH_BOOK', finishBook);
 }
 
 export default orderSaga;
