@@ -12,7 +12,6 @@ import clsx from 'clsx';
 import { useHistory } from 'react-router';
 import { Autocomplete } from '@material-ui/lab';
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 345,
