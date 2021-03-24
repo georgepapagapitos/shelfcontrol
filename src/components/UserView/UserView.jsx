@@ -21,9 +21,11 @@ function UserView() {
     dispatch({
       type: 'FETCH_USER_ORDERS'
     });
-    dispatch({
-      type: 'FETCH_ACTIVE_CART'
-    });
+    if(user.auth_level === "USER") {
+      dispatch({
+        type: 'FETCH_ACTIVE_CART'
+      });
+    }
   }, []);
 
   const handleFinish = (order) => {

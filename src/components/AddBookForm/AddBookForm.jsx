@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginRight: theme.spacing(1),
+    marginTop: theme.spacing(2)
   },
   instructions: {
     marginTop: theme.spacing(1),
@@ -136,13 +137,11 @@ function AddBookForm() {
     setSelectedGenre('');
     setReadingGradeLevel('');
     setIsbn('');
-    }
-
+  }
 
   const handleConfirm = (event) => {
-
-    event.preventDefault();
-    if(readingGradeLevel !== "") {
+    if(readingGradeLevel) {
+      event.preventDefault();
       const bookToAdd = {
         title,
         author,
@@ -176,15 +175,21 @@ function AddBookForm() {
       };
       Swal.fire({
         icon: 'success',
-        title: 'Book added to inventory'
+        title: 'Added book to inventory'
       })
       handleReset();
       history.push('/books');
     } else {
-      window.alert('Please select a reading grade level and a genre.')
+      Swal.fire({
+        icon: 'error',
+        text: 'Select a reading level',
+        confirmButtonColor: '#3f51b5',
+
+      })
     }
+
   }
- 
+
   return(
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
@@ -202,11 +207,9 @@ function AddBookForm() {
       {activeStep === 1 ? (
         <div>
         <Card>
-          <AddBookInfo readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage} bookCoverImage={bookCoverImage} setBookCoverImage={setBookCoverImage} title={title} author={author} selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre}/>
+          <AddBookInfo readingGradeLevel={readingGradeLevel} setReadingGradeLevel={setReadingGradeLevel} infoPage={infoPage} setInfoPage={setInfoPage} bookCoverImage={bookCoverImage} setBookCoverImage={setBookCoverImage} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre}/>
         </Card>
-          <Button onClick={handleBack} className={classes.button}>
-            Back
-          </Button>
+          <Button onClick={handleBack} className={classes.button}>Back</Button>
           <Button onClick={handleConfirm} type="button" variant="contained" color="primary">Confirm</Button>
         </div>
       ) : (
@@ -215,14 +218,16 @@ function AddBookForm() {
             {getStepContent(activeStep)}
           </Typography>
           <div>
+          <center>
             <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
+              onClick={history.goBack}
               className={classes.button}
+              color="secondary"
             >
-                Back
+                Cancel
             </Button>
             <Button
+              disabled={isbn ? false : true}
               variant="contained"
               color="primary"
               onClick={handleNext}
@@ -230,6 +235,7 @@ function AddBookForm() {
             >
             {activeStep === steps.length ? 'Finish' : 'Next'}
             </Button>
+            </center>
           </div>
         </div>
       )}

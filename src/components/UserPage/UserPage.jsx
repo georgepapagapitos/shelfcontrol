@@ -7,7 +7,7 @@ function UserPage() {
   const user = useSelector((store) => store.user);
 
   return (
-    <div className="container">
+    <div>
       {user.auth_level === 'ADMIN' && <AdminView />}
       {user.auth_level === 'USER' && <UserView />}
     </div>

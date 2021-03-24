@@ -103,14 +103,6 @@ function BookListView() {
   const [showTitle, setShowTitle] = useState(true);
   const [showTitleId, setShowTitleId] = useState(-1);
 
-  const [editMode, setEditMode] = useState(false);
-
-  const handleEdit = (book) => {
-    console.log('editclicked', book);
-    setEditMode(true);
-    
-  }
-
   const handleAddToCart = (book) => {
     if(cart.length) {
       console.log('active order');
@@ -205,6 +197,10 @@ function BookListView() {
 
   const handleShowTitle = (i) => {
     setShowTitleId(showTitleId === i ? -1 : i);
+  }
+
+  const handleEdit = (book) => {
+    console.log('editclicked', book);
   }
 
   return (

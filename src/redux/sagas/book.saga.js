@@ -22,6 +22,7 @@ function* addBook(action) {
 }
 
 function* deleteBook(action) {
+  console.log('action', action.payload.bookId)
   try {
     yield axios.delete(`/api/book/${action.payload.bookId}`);
     yield put({ type: 'FETCH_BOOKS' });

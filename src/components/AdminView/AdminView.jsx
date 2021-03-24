@@ -69,7 +69,7 @@ function AdminView() {
   }
 
   return (
-    <div className="container">
+    <div>
       <Typography variant="h2" align="center" gutterBottom>Admin Page</Typography>
       <div className={classes.searchContainer}>
         <SearchIcon className={classes.searchIcon} />

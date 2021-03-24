@@ -2,9 +2,15 @@ import { Card, IconButton, TextField, Typography } from '@material-ui/core';
 import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 
-function Scanner({isbn, setIsbn}) {
+function Scanner({isbn, setIsbn, setIsbnInput}) {
+
+  const handleScan = (event) => {
+   setIsbn((event.currentTarget.value).replace(/\D/g, ''));
+   setIsbnInput(true);
+  }
+
   return (
-    <div className="container">
+    <center>
     <Typography gutterBottom variant="h4" align="center">
       Scan ISBN or enter manually
     </Typography>
@@ -20,8 +26,8 @@ function Scanner({isbn, setIsbn}) {
           }}
       />
     </Card>
-      <TextField placeholder="ISBN" value={isbn} onChange={event => setIsbn((event.currentTarget.value).replace(/\D/g, ''))}></TextField>
-    </div>
+      <TextField placeholder="ISBN" value={isbn} onChange={handleScan}></TextField>
+    </center>
 
   )
 }

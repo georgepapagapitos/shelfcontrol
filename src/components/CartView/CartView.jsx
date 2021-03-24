@@ -85,7 +85,7 @@ function CartView() {
 
   return (
     cart.length > 0 ?
-    <div className="container">
+    <div>
       <Typography gutterBottom variant="h3">Current Cart</Typography>
       <Divider />
     <div>

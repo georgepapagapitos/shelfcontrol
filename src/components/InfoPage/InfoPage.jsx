@@ -7,7 +7,7 @@ import React from 'react';
 
 function InfoPage() {
   return (
-    <div className="container">
+    <div>
       <p>Info Page</p>
     </div>
   );
