@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   title: {
     flexGrow: 1
@@ -63,7 +63,7 @@ function Nav() {
             <MenuIcon />
           </IconButton> */}
           {!user.id && (
-            <Link to="/about" style={{ textDecoration: 'none', color: 'white' }}><Typography className={classes.title} variant="h5">ShelfControl</Typography></Link>
+            <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}><Typography className={classes.title} variant="h5">ShelfControl</Typography></Link>
           )}
           {user.id && (
               <IconButton edge="end" className={classes.menuButton} aria-label="home">

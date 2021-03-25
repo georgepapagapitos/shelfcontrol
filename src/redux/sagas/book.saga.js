@@ -44,14 +44,13 @@ function* increaseQuantity(action) {
 
 function* decreaseQuantity(action) {
   try {
-    yield axios.put('./api/book/decrease', action.payload);
+    yield axios.put('/api/book/decrease', action.payload);
     yield put({ type: 'FETCH_BOOKS' });
   }
   catch(err) {
     console.log('error in decreaseQuantity', err);
   }
 }
-
 
 function* booksSaga() {
   yield takeLatest('FETCH_BOOKS', fetchBooks);

@@ -19,11 +19,13 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import EditBookView from '../EditBookView/EditBookView';
 
 import './App.css';
 import BookListView from '../BookListView/BookListView';
 import CartView from '../CartView/CartView';
 import AddBookForm from '../AddBookForm/AddBookForm';
+import { Typography } from '@material-ui/core';
 
 function App() {
   const dispatch = useDispatch();
@@ -115,13 +117,21 @@ function App() {
               <BookListView />
           </ProtectedRoute>
 
+          {user.auth_level === 'ADMIN' && 
           <ProtectedRoute exact path="/add">
             <AddBookForm />
           </ProtectedRoute>
+          }
+
+          {user.auth_level === 'ADMIN' && 
+          <ProtectedRoute exact path="/edit/:id">
+            <EditBookView />
+          </ProtectedRoute>
+          }
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
-            <h1>404</h1>
+            <Typography align="center" variant="h2" style={{paddingTop: 40}}>404</Typography>
           </Route>
         </Switch>
         <Footer />

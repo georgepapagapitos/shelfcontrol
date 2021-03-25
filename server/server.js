@@ -14,6 +14,7 @@ const readingLevelRouter = require('./routes/reading.level.router');
 const bookRouter = require('./routes/book.router');
 const cartRouter = require('./routes/cart.router');
 const orderRouter = require('./routes/order.router');
+const editRouter = require('./routes/edit.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -33,6 +34,7 @@ app.use('/api/readingLevel', readingLevelRouter);
 app.use('/api/book', bookRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/order', orderRouter);
+app.use('/api/edit', editRouter);
 
 // Serve static files
 app.use(express.static('build'));

@@ -6,6 +6,7 @@ import readingGradeLevels from './reading.levels.reducer';
 import books from './books.reducer';
 import cart from './cart.reducer';
 import orders from './orders.reducer';
+import edit from './edit.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   readingGradeLevels,
   books,
   cart,
-  orders
+  orders,
+  edit
 });
 
 export default rootReducer;

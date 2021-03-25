@@ -77,7 +77,7 @@ router.put('/increase', (req, res) => {
       res.sendStatus(200);
     })
     .catch(err => {
-      console.log('error in PUT /book/increase')
+      console.log('error in PUT /book/increase', err);
     })
 })
 

@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '56.25%',
+    paddingTop: '60%',
   },
   gridContainer: {
     paddingLeft: '40px',
@@ -163,6 +163,7 @@ function BookListView() {
     if(user.auth_level === 'USER') {
       Swal.fire({
         title: book.title,
+        text: book.reading_grade_level,
         text: book.genre_name,
         imageUrl: book.book_cover_image,
         imageAlt: book.title,
@@ -184,6 +185,7 @@ function BookListView() {
         title: book.title,
         text: book.genre_name,
         imageUrl: book.book_cover_image,
+        confirmButtonColor: '#3f51b5',
         imageWidth: '200',
         imageHeight: '225',
         imageAlt: book.title,
@@ -201,6 +203,11 @@ function BookListView() {
 
   const handleEdit = (book) => {
     console.log('editclicked', book);
+    dispatch({
+      type: 'SET_EDIT_BOOK',
+      payload: book
+    });
+    history.push(`/edit/${book.id}`);
   }
 
   return (

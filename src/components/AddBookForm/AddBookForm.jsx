@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+
+// Declare useStyles for styling the component
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '75%',
@@ -25,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
 
 function AddBookForm() {
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const classes = useStyles();
+
   useEffect(() => {
     dispatch({
       type: 'FETCH_GENRES'
@@ -34,9 +40,7 @@ function AddBookForm() {
     });
   }, []);
 
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const classes = useStyles();
+  // Active step determines what to render based on your location in the Stepper
   const [activeStep, setActiveStep] = useState(0);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -227,7 +231,7 @@ function AddBookForm() {
                 Cancel
             </Button>
             <Button
-              disabled={isbn ? false : true}
+              disabled={isbn.length > 9 ? false : true}
               variant="contained"
               color="primary"
               onClick={handleNext}
