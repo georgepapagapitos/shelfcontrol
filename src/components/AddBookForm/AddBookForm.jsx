@@ -40,8 +40,13 @@ function AddBookForm() {
     });
   }, []);
 
+  const genres = useSelector(store => store.genres);
+  const books = useSelector(store => store.books);
+
   // Active step determines what to render based on your location in the Stepper
   const [activeStep, setActiveStep] = useState(0);
+
+  // Initial state for the form's inputs
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -50,11 +55,12 @@ function AddBookForm() {
   const [bookCoverImage, setBookCoverImage] = useState('');
   const [readingGradeLevel, setReadingGradeLevel] = useState('');
   const [infoPage, setInfoPage] = useState('');
-  const genres = useSelector(store => store.genres);
-  const books = useSelector(store => store.books);
 
+  // This is used for the header of the stepper
   const steps = ['Scan ISBN', 'Verify book information'];
 
+  // Function that determines what to display based on the user's
+  // position in the stepper
   const getStepContent = (step) => {
     switch(step) {
       case 0:
@@ -68,29 +74,14 @@ function AddBookForm() {
 
     setActiveStep(1);
 
-    // const headers = {
-    //   'Content-Type': 'application/json',
-    //   'Authorization': process.env.REACT_APP_API_KEY
-    // }
-
-    // axios.get(`https://api2.isbndb.com/book/${isbn}`, {headers})
-    //   .then(data => {
-    //     console.log(data.data.book);
-    //     const book = data.data.book;
-    //     setTitle(book.title);
-    //     setAuthor(book.authors[0]);
-    //     setDescription(book.synopsys);
-    //     setBookCoverImage(book.image);
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error)
-    //   });
-
+    // Make request to google API via the book's ISBN
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
     await axios.get(`${url}`)
       .then((data) => {
+        // Make another request to openLibrary API for more consistent cover images
         axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
           .then((image) => {
+            // Set the book's information using data sent back from API
             setBookCoverImage(image.config.url);
             const genreToAdd = data.data.items[0].volumeInfo.categories[0]
             setTitle(data.data.items[0].volumeInfo.title);
@@ -98,11 +89,11 @@ function AddBookForm() {
             setInfoPage(data.data.items[0].volumeInfo.previewLink);
             setDescription(data.data.items[0].volumeInfo.description);
 
+            // Determine if the genre already exists in the DB
             let doesGenreExist = false;
             let genreId = '';
-
+            // Iterate through existing genres
             for(let genre of genres) {
-              console.log('genre', genre)
               if(genre.genre_name === genreToAdd) {
                 doesGenreExist = true;
                 genreId = genre.id;
@@ -110,7 +101,9 @@ function AddBookForm() {
             }
               if(doesGenreExist) {
                 setSelectedGenre(genreId);
-              } 
+              }
+              // If the genre does not exist, add it to the DB 
+              // then set it as the selected genre
               else {
                 dispatch({
                 type: 'ADD_NEW_GENRE',
@@ -143,6 +136,8 @@ function AddBookForm() {
     setIsbn('');
   }
 
+  // Function that confirms the information 
+  // after the user enters a book's ISBN
   const handleConfirm = (event) => {
     if(readingGradeLevel) {
       event.preventDefault();
@@ -157,26 +152,28 @@ function AddBookForm() {
         infoPage,
       };
   
-      console.log('booktoAdd', bookToAdd);
-  
+      // Check if there is already a matching
+      // ISBN in the database
       let doesBookExist = false;
-  
       for(let book of books) {
         if(book.isbn === isbn) {
           doesBookExist = true;
         }
       }
+      // If there is a match, increase the book's quantity by 1
       if(doesBookExist) {
         dispatch({
           type: 'INCREASE_QUANTITY',
           payload: {isbn: isbn}
         })
+        // If there is not a matching ISBN, add the new book to the DB
       } else {
           dispatch({
             type: 'ADD_BOOK',
             payload: bookToAdd
           })
       };
+      // Alert on success
       Swal.fire({
         icon: 'success',
         title: 'Added book to inventory'
@@ -184,14 +181,13 @@ function AddBookForm() {
       handleReset();
       history.push('/books');
     } else {
+      // Alert that triggers if no reading level is selected
       Swal.fire({
         icon: 'error',
         text: 'Select a reading level',
         confirmButtonColor: '#3f51b5',
-
       })
     }
-
   }
 
   return(
