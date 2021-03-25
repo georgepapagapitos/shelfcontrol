@@ -234,7 +234,7 @@ function BookListView() {
       <Divider className={classes.divider}/>
       <Grid container spacing={4} className={classes.gridContainer} justify="center">
         {books.map((book, i) => {
-          if(book.quantity > 0 && book.title.toLowerCase().includes(titleFilter.toLowerCase()) && book.reading_grade_level.includes(readingLevelFilter)) {
+          if(book.quantity > 0 && (book.title.toLowerCase().includes(titleFilter.toLowerCase()) || book.genre_name.toLowerCase().includes(titleFilter.toLowerCase())) && book.reading_grade_level.includes(readingLevelFilter)) {
             return (
 
               <Grid key={book.id} item xs={12} sm={6} md={4}>
