@@ -203,16 +203,12 @@ function BookListView() {
 
   const handleEdit = (book) => {
     console.log('editclicked', book);
-    dispatch({
-      type: 'SET_EDIT_BOOK',
-      payload: book
-    });
     history.push(`/edit/${book.id}`);
   }
 
   return (
     <div className='container'>
-      <Typography className={classes.title} gutterBottom variant="h3" component="div" align="center">
+      <Typography gutterBottom variant="h3" component="div" align="center">
         Available Books
       </Typography>
       <div className={classes.searchContainer}>

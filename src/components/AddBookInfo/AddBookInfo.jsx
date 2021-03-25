@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     width: '25ch',
   },
   image: {
+    margin: 25,
     height: 375,
     marginTop: theme.spacing(2)
   },

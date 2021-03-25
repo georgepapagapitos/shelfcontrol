@@ -1,6 +1,8 @@
-import { FormControl, InputLabel, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
+import { Button, FormControl, InputLabel, makeStyles, MenuItem, Select, TextareaAutosize, TextField } from "@material-ui/core";
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { useHistory, useParams } from "react-router";
+import Swal from "sweetalert2";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -24,20 +26,19 @@ const useStyles = makeStyles((theme) => ({
 
 function EditBookView() {
 
+  const history = useHistory();
+  const bookIdToEdit = useParams().id;
+  console.log('id to edit', bookIdToEdit);
   const classes = useStyles();
-
   const dispatch = useDispatch();
-
-  const [newTitle, setNewTitle] = useState('');
-  const [newAuthor, setNewAuthor] = useState('');
-  const [newGenre, setNewGenre] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newReadingGradeLevel, setNewReadingGradeLevel] = useState('');
+  const readingGradeLevels = useSelector(store => store.readingGradeLevels);
+  const genres = useSelector(store => store.genres);
+  const book = useSelector(store => store.edit);
 
   useEffect(() => {
     dispatch({
       type: 'FETCH_EDIT_BOOK',
-      payload: {bookId: book.id}
+      payload: {bookIdToEdit: bookIdToEdit}
     })
     dispatch({
       type: 'FETCH_READING_GRADE_LEVELS'
@@ -47,19 +48,33 @@ function EditBookView() {
     });
   }, [])
 
-  const book = useSelector(store => store.edit);
-  const readingGradeLevels = useSelector(store => store.readingGradeLevels);
-  const genres = useSelector(store => store.genres);
+  const handleChange = (key, event) => {
+    dispatch({
+      type: 'EDIT_ON_CHANGE',
+      payload: {property: key, value: event.target.value}
+    })
+  }
 
-  console.log('book', book);
+  const handleUpdate = () => {
+    console.log('in update', book);
+    dispatch({
+      type: 'SUBMIT_EDIT',
+      payload: book
+    })
+    Swal.fire({
+      icon: 'success',
+      title: 'Book Updated'
+    })
+    history.push('/books');
+  }
 
   return ( 
     <center>
     <img className={classes.image} src={book.book_cover_image} alt={book.title}></img>
     <form className={classes.root}>
     <center>
-      <TextField label="Title" className={classes.textField} value={newTitle} onChange={(event) => setNewTitle(event.target.value)}></TextField>
-      <TextField label="Author" className={classes.textField} value={newAuthor} onChange={(event) => setNewAuthor(event.target.value)}></TextField>
+      <TextField label="Title" className={classes.textField} value={book.title} onChange={(event) => handleChange('title', event)}></TextField>
+      <TextField label="Author" className={classes.textField} value={book.author} onChange={(event) => handleChange('author', event)}></TextField>
     </center>
     <FormControl className={classes.formControl}>
       <InputLabel>Reading Level</InputLabel>
@@ -67,6 +82,7 @@ function EditBookView() {
         value={book.reading_grade_level}
         required
         helperText="Select a reading level"
+        onChange={(event) => handleChange('readingGradeLevel', event)}
       >
         {readingGradeLevels.map(gradeLevel => {
           return (
@@ -81,6 +97,7 @@ function EditBookView() {
       labelId="Genre"
       value={book.selectedGenre}
       required
+      onChange={(event) => handleChange('genre', event)}
     >
       {genres.map(genre => {
         return (
@@ -89,6 +106,15 @@ function EditBookView() {
       })}
     </Select>
   </FormControl>
+  <TextareaAutosize
+    rowsMax={4}
+    aria-label="maximum height"
+    placeholder="Enter book description..."
+    value={book.description}
+    onChange={(event) => handleChange('description', event)}
+/>
+    <Button type="button" color="secondary" variant="contained">Cancel</Button>
+    <Button type="button" color="primary" variant="contained" onClick={handleUpdate}>Update</Button>
     </form>
     </center>
   )

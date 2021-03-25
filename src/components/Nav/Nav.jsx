@@ -53,43 +53,38 @@ function Nav() {
   }
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar>
         <Toolbar>
-          {/* <Typography className={classes.title} variant="h3" noWrap>
-            Shelf Control
-          </Typography> */}
-          {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton> */}
           {!user.id && (
             <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}><Typography className={classes.title} variant="h5">ShelfControl</Typography></Link>
           )}
           {user.id && (
-              <IconButton edge="end" className={classes.menuButton} aria-label="home">
-                <Link to="/books">
-                  <HomeIcon style={{fill: "white"}}/>
-                </Link>
-              </IconButton>
+            <IconButton edge="end" className={classes.menuButton} aria-label="home">
+              <Link to="/books">
+                <HomeIcon style={{fill: "white"}}/>
+              </Link>
+            </IconButton>
+          )}
+          {user.auth_level === 'ADMIN' && (
+            <IconButton edge="end" className={classes.menuButton} color="inherit" aria-label="add">
+              <Link to="/add">
+                <LibraryAddIcon style={{fill: "white"}}/>
+              </Link>
+            </IconButton>
             )}
-            {user.auth_level === 'ADMIN' && (
-              <IconButton edge="end" className={classes.menuButton} color="inherit" aria-label="add">
-                <Link to="/add">
-                  <LibraryAddIcon style={{fill: "white"}}/>
+          <IconButton edge="end" className={classes.menuButton} aria-label="user">
+            {user.auth_level === 'ADMIN' ? 
+              <StyledBadge badgeContent={newOrders.length} color="secondary">
+                <Link to={loginLinkData.path}>
+                  {loginLinkData.text}
                 </Link>
-              </IconButton>
-            )}
-            <IconButton edge="end" className={classes.menuButton} aria-label="user">
-              {user.auth_level === 'ADMIN' ? 
-                <StyledBadge badgeContent={newOrders.length} color="secondary">
-                  <Link to={loginLinkData.path}>
-                    {loginLinkData.text}
-                  </Link>
               </StyledBadge> :
               <Link to={loginLinkData.path}>
                 {loginLinkData.text}
-              </Link>}
-            </IconButton>
+              </Link>
+            }
+          </IconButton>
           {user.auth_level === 'USER' && (            
             <IconButton edge="end" className={classes.menuButton} aria-label="cart">
               <StyledBadge badgeContent={cart.length} color="secondary">
@@ -102,7 +97,8 @@ function Nav() {
           {user.id && 
             <IconButton edge="end" className={classes.menuButton} aria-label="logout">
               <LogOutButton />
-            </IconButton>}
+            </IconButton>
+          }
         </Toolbar>
       </AppBar>
       <div className={classes.offset} />

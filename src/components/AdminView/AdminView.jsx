@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
+  title: {
+    marginTop: 20
+  },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     flexBasis: '33.33%',
@@ -70,7 +73,7 @@ function AdminView() {
 
   return (
     <div>
-      <Typography variant="h2" align="center" gutterBottom>Admin Page</Typography>
+      <Typography variant="h3" align="center" component="div" className={classes.title} gutterBottom>Admin Page</Typography>
       <div className={classes.searchContainer}>
         <SearchIcon className={classes.searchIcon} />
         <TextField className={classes.searchInput} onChange={(event) => {setNameFilter(event.target.value)}} label="Search by name" variant="standard" />
