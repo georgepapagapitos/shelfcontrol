@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
-router.get('/', (req, res) => {
+
+router.get('/', rejectUnauthenticated, (req, res) => {
   const query = `SELECT * FROM "genres";`;
   pool.query(query)
     .then(response => {
@@ -14,7 +16,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
   const genreToAdd = req.body.genreToAdd;
   console.log("genreToAdd", genreToAdd);
   const query = `INSERT INTO "genres" ("genre_name") VALUES ($1) RETURNING "id";`;

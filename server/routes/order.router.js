@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
-router.get('/', (req, res) => {
+
+router.get('/', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const query = `SELECT "books".title, "books".book_cover_image, "books".id AS "book_id", "orders_books".order_id, "orders_books".date_completed, "orders".id, "orders".user_id, "orders".order_date, "orders".is_fulfilled, "orders".is_active 
                   FROM "books" 
@@ -20,7 +22,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/all', (req, res) => {
+router.get('/all', rejectUnauthenticated, (req, res) => {
   const query = `SELECT "orders".id, "users".first_name, "users".last_name, "orders".is_fulfilled, "orders".order_date, JSON_AGG("books".title) AS "books"
                   FROM "users"
                   JOIN "orders" ON "users".id="orders".user_id
@@ -38,7 +40,7 @@ router.get('/all', (req, res) => {
     })
 })
 
-router.get('/active', (req, res) => {
+router.get('/active', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const query = `SELECT "orders".id FROM "orders" WHERE "orders".is_active=true AND "orders".user_id=$1;`;
   pool.query(query, [userId])
@@ -51,7 +53,7 @@ router.get('/active', (req, res) => {
     })
 })
 
-router.put('/', (req, res) => {
+router.put('/', rejectUnauthenticated, (req, res) => {
   const orderId = req.body.orderId;
   const query = 'UPDATE "orders" SET "is_fulfilled"=true WHERE "id"=$1;';
   pool.query(query, [orderId])
@@ -64,7 +66,7 @@ router.put('/', (req, res) => {
     })
 })
 
-router.put('/finish', (req, res) => {
+router.put('/finish', rejectUnauthenticated, (req, res) => {
   const date = req.body.date;
   const bookId = req.body.order.book_id;
   const orderId = req.body.order.order_id;

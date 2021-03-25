@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
-router.get('/:id', (req, res) => {
+router.get('/:id', rejectUnauthenticated, (req, res) => {
   const bookId = req.params.id;
   const query = 'SELECT * FROM "books" WHERE "id"=$1;';
   pool.query(query, [bookId])
@@ -16,7 +17,7 @@ router.get('/:id', (req, res) => {
     })
 })
 
-router.put('/', (req, res) => {
+router.put('/', rejectUnauthenticated, (req, res) => {
   console.log('req.body', req.body);
   const bookId = req.body.id;
   const title = req.body.title;

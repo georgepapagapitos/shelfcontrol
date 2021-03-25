@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
   const query = `SELECT "books".id, "books".title, "books".author, "books".isbn, "books".description, "books".book_cover_image, "books".info_page, "books".quantity, "genres".genre_name, "reading_grade_levels".reading_grade_level 
                   FROM "books" 
                   JOIN "genres" ON "books".genre_id="genres".id 
@@ -18,7 +19,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
   console.log('req.body', req.body)
   const bookTitle = req.body.title;
   const bookAuthor = req.body.author;
@@ -42,7 +43,7 @@ router.post('/', (req, res) => {
     })
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const bookId = req.params.id;
   console.log('book id to delete:', bookId);
   const query = 'DELETE FROM "books" WHERE "id"=$1;';
@@ -55,7 +56,7 @@ router.delete('/:id', (req, res) => {
     })
 })
 
-router.put('/decrease', (req, res) => {
+router.put('/decrease', rejectUnauthenticated, (req, res) => {
   const bookId = req.body.bookId;
   console.log('book id to decrease quantity:', bookId);
   const query = 'UPDATE "books" SET "quantity" = "quantity" - 1 WHERE "id"=$1;';
@@ -68,7 +69,7 @@ router.put('/decrease', (req, res) => {
     })
 })
 
-router.put('/increase', (req, res) => {
+router.put('/increase', rejectUnauthenticated, (req, res) => {
   const isbn = req.body.isbn;
   console.log('book isbn to increase quantity:', isbn);
   const query = 'UPDATE "books" SET "quantity" = "quantity" + 1 WHERE "isbn"=$1;';

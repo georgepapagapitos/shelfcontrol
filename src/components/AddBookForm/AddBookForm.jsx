@@ -70,12 +70,12 @@ function AddBookForm() {
     }
   }
 
-  async function handleNext(){
+  async function handleNext() {
 
     setActiveStep(1);
-    
+
     // Make request to google API via the book's ISBN
-     await axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
+    await axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
     .then((image) => {
       // Set the book's information using data sent back from API
       setBookCoverImage(image.config.url);
@@ -107,7 +107,7 @@ function AddBookForm() {
             payload: {genreToAdd}
           })
           setSelectedGenre(genreToAdd);
-                    }
+        }
         // Make another request to openLibrary API for more consistent cover images
       })
       .catch(err => {

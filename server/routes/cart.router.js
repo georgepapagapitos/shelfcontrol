@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const query = `SELECT "books".id, "books".title, "books".isbn, "books".author, "orders_books".order_id, "orders".user_id 
                   FROM "books"
@@ -20,7 +21,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
   const activeOrderId = req.body.activeOrderId;
   const book = req.body.book;
   const query = `INSERT INTO "orders_books" ("order_id", "book_id") VALUES ($1, $2)`;
@@ -35,7 +36,7 @@ router.post('/', (req, res) => {
     })
 })
 
-router.post('/new', (req, res) => {
+router.post('/new', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const query = 'INSERT INTO "orders" ("user_id") VALUES ($1) RETURNING "id";';
   pool.query(query, [userId])
@@ -59,7 +60,7 @@ router.post('/new', (req, res) => {
     })
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const bookId = req.params.id;
   const query = 'DELETE FROM "orders_books" WHERE "book_id"=$1;';
   pool.query(query, [bookId])
@@ -71,7 +72,7 @@ router.delete('/:id', (req, res) => {
     })
 })
 
-router.put('/', (req, res) => {
+router.put('/', rejectUnauthenticated, (req, res) => {
   console.log('in put', req.body);
   const date = req.body.date;
   const orderId = req.body.cart[0].order_id;
