@@ -1,12 +1,11 @@
-import { Button } from '@material-ui/core';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import Swal from 'sweetalert2';
-
+import { useHistory } from 'react-router';
 
 function LogOutButton(props) {
 
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const handleClick = () => {
@@ -21,6 +20,7 @@ function LogOutButton(props) {
         dispatch({
           type: 'LOGOUT'
         });
+        history.push('/login');
       }
     })
   }

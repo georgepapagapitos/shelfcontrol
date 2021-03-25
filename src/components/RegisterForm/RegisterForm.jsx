@@ -41,61 +41,55 @@ function RegisterForm() {
   }; // end registerUser
 
   return (
-      <form className={classes.root} onSubmit={registerUser}>
-        <Typography variant="h4" align="center" gutterBottom>Register User</Typography>
-        {errors.registrationMessage && (
-          <h3 className="alert" role="alert">
-            {errors.registrationMessage}
-          </h3>
-        )}
-
-            <TextField
-              variant="outlined"
-              size="small"
-              type="text"
-              label="Username"
-              value={username}
-              required
-              onChange={(event) => setUsername(event.target.value)}
-            />
-
-            <TextField
-              variant="outlined"
-              size="small"
-              type="password"
-              label="Password"
-              value={password}
-              required
-              onChange={(event) => setPassword(event.target.value)}
-            />
-
-
-            <TextField
-              variant="outlined"
-              size="small"
-              type="text"
-              label="First Name"
-              value={firstName}
-              required
-              onChange={(event) => setFirstName(event.target.value)}
-            />
-
-
-            <TextField
-              variant="outlined"
-              size="small"
-              type="text"
-              label="Last Name"
-              value={lastName}
-              required
-              onChange={(event) => setLastName(event.target.value)}
-            />
-          
-          <div>
-            <Button variant="contained" color="primary" type="submit" name="submit">Register</Button>
-          </div>
-
-      </form>
+    <>
+    <Typography variant="h4" align="center" gutterBottom>Register User</Typography>
+    <form className={classes.root} onSubmit={registerUser}>  
+      {errors.registrationMessage && (
+        <h3 className="alert" role="alert">
+          {errors.registrationMessage}
+        </h3>
+      )}
+      <TextField
+        variant="outlined"
+        size="small"
+        type="text"
+        label="Username"
+        value={username}
+        required
+        onChange={(event) => setUsername(event.target.value)}
+      />
+      <TextField
+        variant="outlined"
+        size="small"
+        type="password"
+        label="Password"
+        value={password}
+        required
+        onChange={(event) => setPassword(event.target.value)}
+      />
+      <TextField
+        variant="outlined"
+        size="small"
+        type="text"
+        label="First Name"
+        value={firstName}
+        required
+        onChange={(event) => setFirstName(event.target.value)}
+      />
+      <TextField
+        variant="outlined"
+        size="small"
+        type="text"
+        label="Last Name"
+        value={lastName}
+        required
+        onChange={(event) => setLastName(event.target.value)}
+      />
+      <div>
+        <Button variant="contained" color="primary" type="submit" name="submit">Register</Button>
+      </div>
+    </form>
+    </>
   );
 }
 

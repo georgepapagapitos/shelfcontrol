@@ -71,9 +71,7 @@ function AddBookForm() {
   }
 
   async function handleNext() {
-
     setActiveStep(1);
-
     // Make request to google API via the book's ISBN
     await axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
     .then((image) => {
@@ -117,7 +115,7 @@ function AddBookForm() {
     .catch(error => {
       console.log('error in get image', error)
     })
-}
+  }
 
 
   const handleBack = () => {

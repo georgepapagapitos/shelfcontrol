@@ -236,7 +236,6 @@ function BookListView() {
         {books.map((book, i) => {
           if(book.quantity > 0 && (book.title.toLowerCase().includes(titleFilter.toLowerCase()) || book.genre_name.toLowerCase().includes(titleFilter.toLowerCase())) && book.reading_grade_level.includes(readingLevelFilter)) {
             return (
-
               <Grid key={book.id} item xs={12} sm={6} md={4}>
                 <Card className={classes.root}>
                   <CardHeader
@@ -246,7 +245,7 @@ function BookListView() {
                             onClick={() => handleShowTitle(i)} 
                             noWrap={showTitleId !== i} 
                             gutterBottom
-                            variant="h6" 
+                            variant="h5" 
                             component="h4"
                           >
                             {book.title}

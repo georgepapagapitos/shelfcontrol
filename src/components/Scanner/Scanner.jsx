@@ -1,6 +1,5 @@
-import { Card, IconButton, TextField, Typography } from '@material-ui/core';
+import { Card, TextField, Typography } from '@material-ui/core';
 import BarcodeScannerComponent from 'react-webcam-barcode-scanner';
-import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 
 function Scanner({isbn, setIsbn}) {
 

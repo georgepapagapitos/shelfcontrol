@@ -14,11 +14,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function RegisterPage() {
+  
   const classes = useStyles();
   const history = useHistory();
 
   return (
-    <>
     <center>
       <Paper className={classes.root}>
         <RegisterForm />
@@ -34,7 +34,6 @@ function RegisterPage() {
         Login
       </Button>
     </center>
-    </>
   );
 }
 

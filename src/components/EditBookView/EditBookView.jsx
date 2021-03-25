@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, makeStyles, MenuItem, Select, TextareaAutosize, TextField } from "@material-ui/core";
+import { Button, FormControl, InputLabel, makeStyles, MenuItem, Paper, Select, TextareaAutosize, TextField } from "@material-ui/core";
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory, useParams } from "react-router";
@@ -68,55 +68,57 @@ function EditBookView() {
     history.push('/books');
   }
 
-  return ( 
-    <center>
-    <img className={classes.image} src={book.book_cover_image} alt={book.title}></img>
-    <form className={classes.root}>
-    <center>
-      <TextField label="Title" className={classes.textField} value={book.title} onChange={(event) => handleChange('title', event)}>{book.title}</TextField>
-      <TextField label="Author" className={classes.textField} value={book.author} onChange={(event) => handleChange('author', event)}>{book.author}</TextField>
-    </center>
-    <FormControl className={classes.formControl}>
-      <InputLabel>Reading Level</InputLabel>
-      <Select
-        value={book.reading_grade_level_id}
-        required
-        helperText="Select a reading level"
-        onChange={(event) => handleChange('readingGradeLevel', event)}
-      >
-        {readingGradeLevels.map(gradeLevel => {
-          return (
-            <MenuItem key={gradeLevel.id} value={gradeLevel.id}>{gradeLevel.reading_grade_level}</MenuItem>
-          )
-        })}
-      </Select>
-    </FormControl>
-    <FormControl className={classes.formControl}>
-    <InputLabel>Genre</InputLabel>
-    <Select
-      labelId="Genre"
-      value={book.genre_id}
-      required
-      onChange={(event) => handleChange('genre', event)}
-    >
-      {genres.map(genre => {
-        return (
-          <MenuItem key={genre.id} value={genre.id}>{genre.genre_name}</MenuItem>
-        )
-      })}
-    </Select>
-  </FormControl>
-  <TextareaAutosize
-    rowsMax={4}
-    aria-label="maximum height"
-    placeholder="Enter book description..."
-    value={book.description}
-    onChange={(event) => handleChange('description', event)}
-/>
-    <Button type="button" color="secondary" variant="contained">Cancel</Button>
-    <Button type="button" color="primary" variant="contained" onClick={handleUpdate}>Update</Button>
-    </form>
-    </center>
+  return (
+    <Paper>
+      <center>
+      <img className={classes.image} src={book.book_cover_image} alt={book.title}></img>
+        <form className={classes.root}>
+        <center>
+          <TextField label="Title" className={classes.textField} value={book.title} onChange={(event) => handleChange('title', event)}>{book.title}</TextField>
+          <TextField label="Author" className={classes.textField} value={book.author} onChange={(event) => handleChange('author', event)}>{book.author}</TextField>
+        </center>
+        <FormControl className={classes.formControl}>
+          <InputLabel>Reading Level</InputLabel>
+          <Select
+            value={book.reading_grade_level_id}
+            required
+            helperText="Select a reading level"
+            onChange={(event) => handleChange('readingGradeLevel', event)}
+          >
+            {readingGradeLevels.map(gradeLevel => {
+              return (
+                <MenuItem key={gradeLevel.id} value={gradeLevel.id}>{gradeLevel.reading_grade_level}</MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+        <InputLabel>Genre</InputLabel>
+        <Select
+          labelId="Genre"
+          value={book.genre_id}
+          required
+          onChange={(event) => handleChange('genre', event)}
+        >
+          {genres.map(genre => {
+            return (
+              <MenuItem key={genre.id} value={genre.id}>{genre.genre_name}</MenuItem>
+            )
+          })}
+        </Select>
+      </FormControl>
+      <TextareaAutosize
+        rowsMax={4}
+        aria-label="maximum height"
+        placeholder="Enter book description..."
+        value={book.description}
+        onChange={(event) => handleChange('description', event)}
+    />
+        <Button type="button" color="secondary" variant="contained">Cancel</Button>
+        <Button type="button" color="primary" variant="contained" onClick={handleUpdate}>Update</Button>
+        </form>
+      </center>
+    </Paper>
   )
 }
 

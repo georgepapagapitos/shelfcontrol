@@ -121,7 +121,6 @@ function CartView() {
       </div>
     </div>
     : <center><Typography className={classes.empty} variant="h4">Your Cart Is Empty!</Typography><Button color="secondary" variant="outlined" onClick={history.goBack}>Back</Button></center>
-
   )
 }
 
