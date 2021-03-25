@@ -73,13 +73,13 @@ function EditBookView() {
     <img className={classes.image} src={book.book_cover_image} alt={book.title}></img>
     <form className={classes.root}>
     <center>
-      <TextField label="Title" className={classes.textField} value={book.title} onChange={(event) => handleChange('title', event)}></TextField>
-      <TextField label="Author" className={classes.textField} value={book.author} onChange={(event) => handleChange('author', event)}></TextField>
+      <TextField label="Title" className={classes.textField} value={book.title} onChange={(event) => handleChange('title', event)}>{book.title}</TextField>
+      <TextField label="Author" className={classes.textField} value={book.author} onChange={(event) => handleChange('author', event)}>{book.author}</TextField>
     </center>
     <FormControl className={classes.formControl}>
       <InputLabel>Reading Level</InputLabel>
       <Select
-        value={book.reading_grade_level}
+        value={book.reading_grade_level_id}
         required
         helperText="Select a reading level"
         onChange={(event) => handleChange('readingGradeLevel', event)}
@@ -95,7 +95,7 @@ function EditBookView() {
     <InputLabel>Genre</InputLabel>
     <Select
       labelId="Genre"
-      value={book.selectedGenre}
+      value={book.genre_id}
       required
       onChange={(event) => handleChange('genre', event)}
     >
