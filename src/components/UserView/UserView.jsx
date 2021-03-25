@@ -1,17 +1,11 @@
-import { Divider, Typography, makeStyles, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@material-ui/core";
+import { Typography, makeStyles, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@material-ui/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import moment from 'moment';
-import DoneIcon from '@material-ui/icons/Done';
-
-const useStyles = makeStyles({
-
-})
 
 function UserView() {
 
   const dispatch = useDispatch();
-  const classes = useStyles();
   const orders = useSelector((store) => store.orders);
   const user = useSelector((store) => store.user);
 
@@ -45,7 +39,7 @@ function UserView() {
         {user.first_name}'s Books
       </Typography>
       <TableContainer component={Paper}>
-        <Table className={classes.table}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>Book Title</TableCell>

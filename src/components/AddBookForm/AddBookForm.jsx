@@ -71,8 +71,57 @@ function AddBookForm() {
   }
 
   async function handleNext() {
-
     setActiveStep(1);
+    await getImage();
+    await getData();
+  }
+
+  const getImage = () => {
+    axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
+      .then(image => {
+        setBookCoverImage(image.config.url);
+      })
+      .catch(err => {
+        console.log('error in getImage', err);
+      })
+  }
+
+  const getData = () => {
+    axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+      .then(data => {
+        const genreToAdd = data.data.items[0].volumeInfo.categories[0]
+        setTitle(data.data.items[0].volumeInfo.title);
+        setAuthor(data.data.items[0].volumeInfo.authors[0]);
+        setInfoPage(data.data.items[0].volumeInfo.previewLink);
+        setDescription(data.data.items[0].volumeInfo.description);
+        // Determine if the genre already exists in the DB
+        let doesGenreExist = false;
+        let genreId = '';
+        // Iterate through existing genres
+        for(let genre of genres) {
+          if(genre.genre_name === genreToAdd) {
+            doesGenreExist = true;
+            genreId = genre.id;
+          }
+        }
+        if(doesGenreExist) {
+          setSelectedGenre(genreId);
+        }
+        // If the genre does not exist, add it to the DB 
+        // then set it as the selected genre
+        else {
+          dispatch({
+            type: 'ADD_NEW_GENRE',
+            payload: {genreToAdd}
+          })
+          setSelectedGenre(genreToAdd);
+        }
+      })
+      .catch(err => {
+        console.log('error in getData', err);
+      })
+    }
+  
 
     // Make request to google API via the book's ISBN
     await axios.get(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`)
@@ -122,6 +171,7 @@ function AddBookForm() {
   }
 
   const handleBack = () => {
+    handleReset();
     setActiveStep(0);
   }
 
