@@ -4,7 +4,6 @@ import { Typography, IconButton, makeStyles, Button, Divider, CardMedia, Card, C
 import Swal from 'sweetalert2';
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete';
-import './BookListView.css';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';

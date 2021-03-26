@@ -35,9 +35,11 @@ function UserView() {
 
   return (
     <div className="container">
+    <center>
       <Typography variant="h4" component="span" align="center" gutterBottom>
-        {user.first_name}'s Books
+          {user.first_name}'s Books
       </Typography>
+    </center>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
