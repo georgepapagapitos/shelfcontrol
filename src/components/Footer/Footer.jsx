@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 // This is one of our simplest components
@@ -7,7 +8,7 @@ import './Footer.css';
 // or even care what the redux state is, so it doesn't need 'connect()'
 
 function Footer() {
-  return <footer>&copy; A Human Company</footer>;
+  return <Link to="/about" style={{ textDecoration:"none", color:"black"}}><footer>&copy; A Human Company</footer></Link>;
 }
 
 export default Footer;

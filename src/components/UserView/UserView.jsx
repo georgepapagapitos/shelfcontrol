@@ -35,7 +35,7 @@ function UserView() {
 
   return (
     <div className="container">
-      <Typography variant="h4" component="div" align="center" gutterBottom>
+      <Typography variant="h4" component="span" align="center" gutterBottom>
         {user.first_name}'s Books
       </Typography>
       <TableContainer component={Paper}>
@@ -58,7 +58,7 @@ function UserView() {
                 </TableCell>
                 <TableCell align="right">
                   {(order.is_fulfilled && order.date_completed === null) ? <Button align="right" variant="contained" color="primary" type="button" onClick={() => handleFinish(order)}>Finished</Button> : 
-                  (order.is_fulfilled && order.date_completed) ? `Finished - ${moment(order.date_completed).format('MMM DD YYYY')}` : 'On the way!'}
+                  (order.is_fulfilled && order.date_completed) ? `Finished - ${moment(order.date_completed).format('MMM DD YYYY')}` : 'Order received'}
                 </TableCell>
               </TableRow>
             ))}

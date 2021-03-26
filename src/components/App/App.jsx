@@ -131,7 +131,7 @@ function App() {
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
-            <Typography align="center" variant="h2" style={{paddingTop: 40}}>404</Typography>
+            <Typography component="span" align="center" variant="h2" style={{paddingTop: 40}}>404</Typography>
           </Route>
         </Switch>
         <Footer />

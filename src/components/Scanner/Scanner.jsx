@@ -9,7 +9,7 @@ function Scanner({isbn, setIsbn}) {
 
   return (
     <center>
-    <Typography gutterBottom variant="h4" align="center">
+    <Typography component="span" gutterBottom variant="h4" align="center">
       Scan ISBN or enter manually
     </Typography>
     <Card>

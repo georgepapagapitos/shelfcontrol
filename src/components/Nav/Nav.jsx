@@ -31,10 +31,17 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1
   },
+  right: {
+    display:"flex",
+    alignItems: "center",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
   offset: theme.mixins.toolbar,
 }));
 
 function Nav() {
+
   const classes = useStyles();
   const user = useSelector((store) => store.user);
   const cart = useSelector((store) => store.cart);
@@ -55,10 +62,11 @@ function Nav() {
   return (
     <div>
       <AppBar>
-        <Toolbar>
+        <Toolbar style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
           {!user.id && (
             <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}><Typography className={classes.title} variant="h5">ShelfControl</Typography></Link>
           )}
+          <div className={classes.right}>
           {user.id && (
             <IconButton edge="end" className={classes.menuButton} aria-label="home">
               <Link to="/books">
@@ -99,6 +107,7 @@ function Nav() {
               <LogOutButton />
             </IconButton>
           }
+          </div>
         </Toolbar>
       </AppBar>
       <div className={classes.offset} />

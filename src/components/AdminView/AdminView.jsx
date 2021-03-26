@@ -4,6 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Typo
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DoneIcon from '@material-ui/icons/Done';
 import SearchIcon from '@material-ui/icons/Search';
+import SendIcon from '@material-ui/icons/Send';
 import { fade } from '@material-ui/core/styles';
 import moment from 'moment';
 
@@ -48,20 +49,25 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#f2f2f2'
     },
   },
+  sendButton: {
+    marginTop: 10,
+    marginLeft: 50
+  }
 }));
 
 function AdminView() {
 
   const dispatch = useDispatch();
-  const orders = useSelector((store) => store.orders);
   const classes = useStyles();
   const [nameFilter, setNameFilter] = useState('');
 
   useEffect(() => {
     dispatch({
       type: 'FETCH_ALL_ORDERS'
-    })
+    });
   }, []);
+
+  const orders = useSelector((store) => store.orders);
 
   const markOrderSent = (orderId) => {
     console.log('marked order sent with id of:', orderId);
@@ -84,15 +90,15 @@ function AdminView() {
         let userFullName = `${order.first_name} ${order.last_name}`;
         if(userFullName.toLowerCase().includes(nameFilter.toLowerCase())) {
         return (
-          <Accordion>
+          <Accordion key={i}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-label="Expand"
               aria-controls="additional-actions1-content"
               id="additional-actions1-header"
             >
-            <Typography className={classes.heading}>{orderLabel}</Typography>
-            <Typography className={classes.secondaryHeading}>
+            <Typography component="span" className={classes.heading}>{orderLabel}</Typography>
+            <Typography component="span" className={classes.secondaryHeading}>
               {userFullName} <Divider/> {moment(order.order_date).format('MM-DD-YYYY')}
             </Typography>
             </AccordionSummary>
@@ -100,12 +106,12 @@ function AdminView() {
             <ul>
             {order.books.map((book, i) => {
                 return (
-                  <li>
-                    <Typography variant="caption">{book}</Typography>
+                  <li key={i}>
+                    <Typography component="span" variant="caption">{book}</Typography>
                   </li>
                 )
               })}
-              {!order.is_fulfilled &&<Button size="small" type="button" variant="contained" color="primary" onClick={() => markOrderSent(order.id)}>Mark Sent</Button>}
+              {!order.is_fulfilled && <Button size="small" className={classes.sendButton} type="button" variant="contained" color="primary" onClick={() => markOrderSent(order.id)}>Mark Sent</Button>}
             </ul>
             </AccordionDetails>
           </Accordion>

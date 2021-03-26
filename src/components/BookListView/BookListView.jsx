@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Typography, IconButton, makeStyles, Button, Divider, CardMedia, Card, CardActionArea, CardContent, CardActions, Grid, TextField, CardHeader, Collapse, Box } from "@material-ui/core";
+import { Typography, IconButton, makeStyles, Button, Divider, CardMedia, Card, CardContent, CardActions, Grid, TextField, CardHeader, Collapse, Box } from "@material-ui/core";
 import Swal from 'sweetalert2';
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -177,7 +177,6 @@ function BookListView() {
       .then((result) => {
         if (result.isConfirmed) {
           handleAddToCart(book);
-          history.push('/cart');
         }
       })
     } else {
@@ -208,7 +207,7 @@ function BookListView() {
 
   return (
     <div className='container'>
-      <Typography gutterBottom variant="h3" component="div" align="center">
+      <Typography gutterBottom variant="h3" component="h1" align="center">
         Available Books
       </Typography>
       <div className={classes.searchContainer}>

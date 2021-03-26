@@ -1,4 +1,4 @@
-import { Button, Typography, StepLabel, Step, Stepper, TextField, Paper, Card } from "@material-ui/core";
+import { Button, Typography, StepLabel, Step, Stepper, Card } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Scanner from "../Scanner/Scanner";

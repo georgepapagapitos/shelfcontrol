@@ -25,15 +25,15 @@ function LoginForm() {
 
     if (username && password) {
       dispatch({
-        type: 'FETCH_ALL_ORDERS'
-      });
-      dispatch({
         type: 'LOGIN',
         payload: {
           username: username,
           password: password,
         },
       });
+      dispatch({
+        type: 'FETCH_ALL_ORDERS'
+      })
     } else {
       dispatch({ type: 'LOGIN_INPUT_ERROR' });
     }

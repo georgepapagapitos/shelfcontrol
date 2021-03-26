@@ -8,9 +8,7 @@ import React from 'react';
 
 function AboutPage() {
   return (
-      <Paper>
-        <Typography align="center">This about page is for anyone to read!</Typography>
-      </Paper>
+        <Typography style={{marginTop: 50}}align="center" variant="h4" component="h1">Thank you!</Typography>
   );
 }
 

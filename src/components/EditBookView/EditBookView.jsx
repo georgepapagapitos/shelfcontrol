@@ -56,7 +56,6 @@ function EditBookView() {
   }
 
   const handleUpdate = () => {
-    console.log('in update', book);
     dispatch({
       type: 'SUBMIT_EDIT',
       payload: book
@@ -74,13 +73,14 @@ function EditBookView() {
       <img className={classes.image} src={book.book_cover_image} alt={book.title}></img>
         <form className={classes.root}>
         <center>
-          <TextField label="Title" className={classes.textField} value={book.title} onChange={(event) => handleChange('title', event)}>{book.title}</TextField>
-          <TextField label="Author" className={classes.textField} value={book.author} onChange={(event) => handleChange('author', event)}>{book.author}</TextField>
+          <TextField label="Title" className={classes.textField} value={book.title || ""} onChange={(event) => handleChange('title', event)}>{book.title}</TextField>
+          <TextField label="Author" className={classes.textField} value={book.author || ""} onChange={(event) => handleChange('author', event)}>{book.author}</TextField>
         </center>
         <FormControl className={classes.formControl}>
           <InputLabel>Reading Level</InputLabel>
           <Select
-            value={book.reading_grade_level_id}
+            value={book.readingGradeLevel || ""}
+            labelId="Reading Level"
             required
             helperText="Select a reading level"
             onChange={(event) => handleChange('readingGradeLevel', event)}
@@ -95,8 +95,8 @@ function EditBookView() {
         <FormControl className={classes.formControl}>
         <InputLabel>Genre</InputLabel>
         <Select
+          value={book.genre || ""}
           labelId="Genre"
-          value={book.genre_id}
           required
           onChange={(event) => handleChange('genre', event)}
         >
@@ -111,10 +111,10 @@ function EditBookView() {
         rowsMax={4}
         aria-label="maximum height"
         placeholder="Enter book description..."
-        value={book.description}
+        value={book.description || ""}
         onChange={(event) => handleChange('description', event)}
     />
-        <Button type="button" color="secondary" variant="contained">Cancel</Button>
+        <Button type="button" color="secondary" variant="contained" onClick={history.goBack}>Cancel</Button>
         <Button type="button" color="primary" variant="contained" onClick={handleUpdate}>Update</Button>
         </form>
       </center>

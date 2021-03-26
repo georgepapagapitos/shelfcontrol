@@ -2,7 +2,6 @@ import { TextField, Typography, FormControl, Select, MenuItem, InputLabel, makeS
 import { fade } from '@material-ui/core/styles';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
 
 // Declare useStyles for styling the component
 const useStyles = makeStyles((theme) => ({

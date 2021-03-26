@@ -22,7 +22,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     })
 })
 
-router.get('/all', rejectUnauthenticated, (req, res) => {
+router.get('/all', (req, res) => {
   const query = `SELECT "orders".id, "users".first_name, "users".last_name, "orders".is_fulfilled, "orders".order_date, JSON_AGG("books".title) AS "books"
                   FROM "users"
                   JOIN "orders" ON "users".id="orders".user_id
