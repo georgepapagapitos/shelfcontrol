@@ -11,7 +11,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
                   JOIN "orders_books" ON "books".id="orders_books".book_id 
                   JOIN "orders" ON "orders_books".order_id="orders".id 
                   WHERE "orders".user_id=$1
-                  ORDER BY "orders".order_date DESC;`;
+                  ORDER BY "orders".id DESC;`;
   pool.query(query, [userId])
     .then(result => {
       res.send(result.rows);
