@@ -26,6 +26,7 @@ import BookListView from '../BookListView/BookListView';
 import CartView from '../CartView/CartView';
 import AddBookForm from '../AddBookForm/AddBookForm';
 import { Typography } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {
   const dispatch = useDispatch();
@@ -37,6 +38,8 @@ function App() {
   const user = useSelector(store => store.user);
 
   return (
+    <>
+    <CssBaseline />
     <Router>
         <Nav />
         <Switch>
@@ -135,6 +138,7 @@ function App() {
         </Switch>
         <Footer />
     </Router>
+    </>
   );
 }
 
