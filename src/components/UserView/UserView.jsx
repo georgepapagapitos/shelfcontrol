@@ -50,20 +50,24 @@ function UserView() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order, i) => (
-              <TableRow key={i}>
-                <TableCell component="th" scope="row">
-                  {order.title}
-                </TableCell>
-                <TableCell align="right">
-                  {moment(order.order_date).format('MMM DD YYYY')}
-                </TableCell>
-                <TableCell align="right">
-                  {(order.is_fulfilled && order.date_completed === null) ? <Button align="right" variant="contained" color="primary" type="button" onClick={() => handleFinish(order)}>Finished</Button> : 
-                  (order.is_fulfilled && order.date_completed) ? `Finished - ${moment(order.date_completed).format('MMM DD YYYY')}` : 'Order received'}
-                </TableCell>
-              </TableRow>
-            ))}
+            {orders.map((order, i) => {
+              if(order.order_date != null) {
+                return (
+                  <TableRow key={i}>
+                    <TableCell component="th" scope="row">
+                      {order.title}
+                    </TableCell>
+                    <TableCell align="right">
+                      {moment(order.order_date).format('MMM DD YYYY')}
+                    </TableCell>
+                    <TableCell align="right">
+                      {(order.is_fulfilled && order.date_completed === null) ? <Button align="right" variant="contained" color="primary" type="button" onClick={() => handleFinish(order)}>Finished</Button> : 
+                      (order.is_fulfilled && order.date_completed) ? `Finished - ${moment(order.date_completed).format('MMM DD YYYY')}` : 'Order received'}
+                    </TableCell>
+                  </TableRow>
+                )
+              }
+            })}
           </TableBody>
         </Table>
       </TableContainer>
