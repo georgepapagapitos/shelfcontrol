@@ -36,7 +36,7 @@ function UserView() {
   return (
     <div className="container">
     <center>
-      <Typography variant="h4" component="span" align="center" gutterBottom>
+      <Typography variant="h4" component="h1" align="center" gutterBottom style={{marginBottom: 20}}>
           {user.first_name}'s Books
       </Typography>
     </center>

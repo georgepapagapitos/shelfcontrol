@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
@@ -8,7 +9,7 @@ import './Footer.css';
 // or even care what the redux state is, so it doesn't need 'connect()'
 
 function Footer() {
-  return <Link to="/about" style={{ textDecoration:"none", color:"black"}}><footer>&copy; A Human Company</footer></Link>;
+  return <Link to="/about" style={{ textDecoration:"none", color:"black"}}><Typography variant="subtitle2" display="block" className="footer">&copy; A Human Company</Typography></Link>;
 }
 
 export default Footer;
